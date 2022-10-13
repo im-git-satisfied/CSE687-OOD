@@ -13,6 +13,7 @@ class Map
     public:
         explicit Map();
         void tokenMap(string key, string value);
+        void getTokenMap();
     
     private:
         string tokenize(string word);

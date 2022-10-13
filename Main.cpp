@@ -18,4 +18,6 @@ int main()
         wordMap.tokenMap("sample.txt",fileContent[i]);
     }
 
+    wordMap.getTokenMap();
+
 }

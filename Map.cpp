@@ -15,27 +15,10 @@ void Map::tokenMap(string fileName, string line)
 
     while (ss >> buffer)
     {
-        token = tokenize(buffer);
-        // iterates through the map to see if the distinct token exists
-        map<string,int>::iterator it = wordCount.find(token);
-        if (it != wordCount.end())
-        {
-            // increments the count of a unique token
-            it->second++;
-        }
-        else
-        {
-            // add the unique token to the map
-            wordCount.insert(make_pair(token,1));
-        }
+        token = tokenize(buffer);    
+        // add the unique token to the map
+        wordCount.insert(make_pair(token,1));
     }
-    
-    // prints the contents of the map
-    for ( map<string,int>::iterator it = wordCount.begin(); it != wordCount.end(); it++)
-    {
-        cout << "(" << it->first << "," << it->second << ")" << endl;
-    }
-
 }
 
 // tokenizer that removes punctuation and make the word lower case
@@ -56,6 +39,16 @@ string Map::tokenize(string token)
     transform(token.begin(),token.end(),token.begin(),::tolower);
 
     return token;
+}
+
+void Map::getTokenMap()
+{
+    // prints the contents of the map
+    for (map<string,int>::iterator it = wordCount.begin(); it != wordCount.end(); ++it)
+    {
+        cout << "(" << it->first << "," << it->second << ")" << endl;
+    }
+
 }
 
 // export function???
