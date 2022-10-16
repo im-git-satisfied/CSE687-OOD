@@ -6,17 +6,15 @@
 #include <map>
 #include <iterator>
 
-using namespace std;
-
 class Map
 {
     public:
         explicit Map();
-        void tokenMap(string key, string value);
+        void tokenMap(std::string key, std::string value);
         void getTokenMap();
     
     private:
-        string tokenize(string word);
-        void fileExport();
-        map<string,int> wordCount;
+        std::string tokenize(std::string word);
+        void fileExport(std::string key, int value);
+        std::map<std::string,int> wordBuffer;
 };

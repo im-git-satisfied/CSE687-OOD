@@ -6,23 +6,22 @@ Map::Map()
 }
 
 // map function
-void Map::tokenMap(string fileName, string line)
+void Map::tokenMap(std::string fileName, std::string line)
 {
-    string buffer;
-    string token;
+    std::string buffer;
+    std::string token;
 
-    stringstream ss(line);
+    std::stringstream ss(line);
 
     while (ss >> buffer)
     {
-        token = tokenize(buffer);    
-        // add the unique token to the map
-        wordCount.insert(make_pair(token,1));
+        token = tokenize(buffer);
+        fileExport(token,1);  
     }
 }
 
 // tokenizer that removes punctuation and make the word lower case
-string Map::tokenize(string token)
+std::string Map::tokenize(std::string token)
 {
     // remove any punctuation in the token
     int len = token.size();
@@ -44,16 +43,39 @@ string Map::tokenize(string token)
 void Map::getTokenMap()
 {
     // prints the contents of the map
-    for (map<string,int>::iterator it = wordCount.begin(); it != wordCount.end(); ++it)
+    for (std::map<std::string,int>::iterator it = wordBuffer.begin(); it != wordBuffer.end(); ++it)
     {
-        cout << "(" << it->first << "," << it->second << ")" << endl;
+        std::cout << "(" << it->first << "," << it->second << ")" << std::endl;
     }
-
 }
 
-// export function???
-void Map::fileExport()
+// export function
+void Map::fileExport(std::string word, int count)
 {
-
+    // add the unique token to the word buffer
+    wordBuffer.insert(make_pair(word,count));
+    if (wordBuffer.size() == 20)
+    {
+        // write out to file when the buffer is full
+        getTokenMap();
+    }
 }
+
+/*----< entry point simply invokes its own self-test >-------------*/
+#define Test_MapClass
+#ifdef Test_MapClass
+
+int main()
+{
+	std::cout << std::endl << "Testing the Map Class";
+	std::cout << std::endl << "-----------------------------------------------------------------------" << std::endl;
+								  
+	Map mClass;
+	
+	std::string line = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat. Tristique senectus et netus et. Amet porttitor eget dolor morbi.";
+    mClass.tokenMap("sample.txt",line);
+
+    std::cout << "\n\n";
+}
+#endif
 
