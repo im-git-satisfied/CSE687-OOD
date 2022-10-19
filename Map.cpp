@@ -62,20 +62,20 @@ void Map::fileExport(std::string word, int count)
 }
 
 /*----< entry point simply invokes its own self-test >-------------*/
-#define Test_MapClass
-#ifdef Test_MapClass
+// #define Test_MapClass
+// #ifdef Test_MapClass
 
-int main()
-{
-	std::cout << std::endl << "Testing the Map Class";
-	std::cout << std::endl << "-----------------------------------------------------------------------" << std::endl;
+// int main()
+// {
+// 	std::cout << std::endl << "Testing the Map Class";
+// 	std::cout << std::endl << "-----------------------------------------------------------------------" << std::endl;
 								  
-	Map mClass;
+// 	Map mClass;
 	
-	std::string line = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat. Tristique senectus et netus et. Amet porttitor eget dolor morbi.";
-    mClass.tokenMap("sample.txt",line);
+// 	std::string line = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat. Tristique senectus et netus et. Amet porttitor eget dolor morbi.";
+//     mClass.tokenMap("sample.txt",line);
 
-    std::cout << "\n\n";
-}
-#endif
+//     std::cout << "\n\n";
+// }
+// #endif
 
