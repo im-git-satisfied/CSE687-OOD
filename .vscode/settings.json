@@ -14,6 +14,7 @@
         "streambuf": "cpp",
         "utility": "cpp",
         "type_traits": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "sort" :"cpp"
     }
 }

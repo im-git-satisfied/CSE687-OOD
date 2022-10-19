@@ -5,9 +5,8 @@
 #include <vector>
 
 
-namespace MapReduce
+//namespace MapReduce
 
-{
     class SortMap
     {
         private:
@@ -21,6 +20,7 @@ namespace MapReduce
             void update (std::string key, int value);
 
         public:
+            //SortMap();
             // used to sort key, value pairs
             void sort(std::string key,  int value);
 
@@ -38,5 +38,5 @@ namespace MapReduce
             // just print the keys 
             void print_keys(void);
     };
-}
+
 #endif

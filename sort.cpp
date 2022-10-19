@@ -1,13 +1,14 @@
 #include "sort.h"
 
 
-using namespace MapReduce;
-using namespace std;
+//using namespace MapReduce;
+//using namespace std;
 
+//SortMap SortMap(){};
 
-void SortMap::add (string key, int value) {
-                cout << "adding\n";
-                vector<int> container = {value};
+void SortMap::add (std::string key, int value) {
+                std::cout << "adding\n";
+                std::vector<int> container = {value};
                 this->words.insert({key, container});
             }
 
@@ -26,11 +27,11 @@ void SortMap::sort(std::string key,  int value) {
     }
 
             // grab items from the list. 
-map<string, vector<int>>::iterator SortMap::begin(void){
+std::map<std::string, std::vector<int>>::iterator SortMap::begin(void){
     return this->words.begin();
 }
 
-map<string, vector<int>>::iterator SortMap::end(void){
+std::map<std::string, std::vector<int>>::iterator SortMap::end(void){
     return this->words.end();
 }
             // check and see if the map is empty. 
