@@ -2,3 +2,7 @@
 *vcxproj*
 *.sln
 x64
+.vscode/
+build/
+Main
+*dSYM
