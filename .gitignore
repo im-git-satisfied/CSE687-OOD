@@ -2,9 +2,10 @@
 *vcxproj*
 *.sln
 x64
-.vscode/
+.vscode/*
 build/
 Main
 *dSYM
 *.~lock
 *.vscode
+*.swp

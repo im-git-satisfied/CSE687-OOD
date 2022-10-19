@@ -116,9 +116,9 @@ std::string FileManagement::readFile(std::string directory, std::string filename
 }
 
 // if file exists, it will append each input as its own row
-// ("a", [1, 1, …])
-// ("the", [1, 1, …])
-// ("is", [1, …])
+// ("a", [1, 1, ï¿½])
+// ("the", [1, 1, ï¿½])
+// ("is", [1, ï¿½])
 bool FileManagement::writeFile(std::map<std::string, std::vector<int>> data, std::string directory, std::string filename)
 {
 	if (directory.back() != '\\') {
@@ -145,7 +145,7 @@ bool FileManagement::writeFile(std::map<std::string, std::vector<int>> data, std
 
 
 /*************** REMOVE, for testing only *************************************************/
-#define Test_FileManagement 
+//#define Test_FileManagement 
 /******************************************************************************************/
 
 #ifdef Test_FileManagement

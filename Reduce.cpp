@@ -22,7 +22,7 @@ void Reduce::exportReduce(std::string word, int reducedValue)
 }
 
 /*----< entry point simply invokes its own self-test >-------------*/
-#define Test_ReduceClass
+//#define Test_ReduceClass
 #ifdef Test_ReduceClass
 
 int main()

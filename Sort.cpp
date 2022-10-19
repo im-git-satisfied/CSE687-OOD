@@ -1,10 +1,13 @@
-#include "sort.h"
+#include "Sort.h"
 
 
 //using namespace MapReduce;
 //using namespace std;
 
-//SortMap SortMap(){};
+SortMap::SortMap()
+{
+    
+}
 
 void SortMap::add (std::string key, int value) {
                 std::cout << "adding\n";
