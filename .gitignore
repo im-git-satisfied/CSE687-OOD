@@ -6,3 +6,5 @@ x64
 build/
 Main
 *dSYM
+*.~lock
+*.vscode
