@@ -3,6 +3,7 @@
 // Map Constructor
 Map::Map()
 {
+    isFull = false;
 }
 
 // map function
@@ -40,28 +41,37 @@ std::string Map::tokenize(std::string token)
     return token;
 }
 
-void Map::getTokenMap()
-{
-    // prints the contents of the map
-    for (std::map<std::string,int>::iterator it = wordBuffer.begin(); it != wordBuffer.end(); ++it)
-    {
-        std::cout << "(" << it->first << "," << it->second << ")" << std::endl;
-    }
-}
+// void Map::getTokenMap()
+// {
+//     // prints the contents of the map
+//     for (std::map<std::string,int>::iterator it = wordBuffer.begin(); it != wordBuffer.end(); ++it)
+//     {
+//         std::cout << "(" << it->first << "," << it->second << ")" << std::endl;
+//     }
+// }
 
 // export function
 void Map::fileExport(std::string word, int count)
 {
+    std::vector<int> cVec;
+    cVec.push_back(count);
     // add the unique token to the word buffer
-    wordBuffer.insert(make_pair(word,count));
+    wordBuffer.insert(make_pair(word,cVec));
     if (wordBuffer.size() == 20)
     {
         // write out to file when the buffer is full
-        getTokenMap();
+        // getTokenMap();
+        isFull = true;
     }
 }
 
-/*----< entry point simply invokes its own self-test >-------------*/
+void Map::clearBuffer()
+{
+    wordBuffer.clear();
+    isFull = false;
+}
+
+// /*----< entry point simply invokes its own self-test >-------------*/
 // #define Test_MapClass
 // #ifdef Test_MapClass
 

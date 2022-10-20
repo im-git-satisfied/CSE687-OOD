@@ -83,9 +83,24 @@ bool FileManagement::EndOfFile(std::string file)
 // reads a line from the specified directory and file name
 std::string FileManagement::readFile(std::string directory, std::string filename)
 {
+	#ifdef _WIN64
+	//define something for Windows (64-bit)
 	if (directory.back() != '\\') {
 		directory = directory + '\\';
 	}
+	#elif _WIN32
+	if (directory.back() != '\\') {
+		directory = directory + '\\';
+	}
+	#elif __APPLE__
+	if (directory.back() != '/') {
+		directory = directory + '/';
+	}
+	#elif __linux
+	if (directory.back() != '/') {
+		directory = directory + '/';
+	}
+	#endif
 
 	std::string cur_file = directory + filename;
 
@@ -121,9 +136,24 @@ std::string FileManagement::readFile(std::string directory, std::string filename
 // ("is", [1, �])
 bool FileManagement::writeFile(std::map<std::string, std::vector<int>> data, std::string directory, std::string filename)
 {
+	#ifdef _WIN64
+	//define something for Windows (64-bit)
 	if (directory.back() != '\\') {
 		directory = directory + '\\';
 	}
+	#elif _WIN32
+	if (directory.back() != '\\') {
+		directory = directory + '\\';
+	}
+	#elif __APPLE__
+	if (directory.back() != '/') {
+		directory = directory + '/';
+	}
+	#elif __linux
+	if (directory.back() != '/') {
+		directory = directory + '/';
+	}
+	#endif
 
 	std::string cur_file = directory + filename;
 	std::ofstream newfile;
@@ -147,78 +177,81 @@ bool FileManagement::writeFile(std::map<std::string, std::vector<int>> data, std
 /*************** REMOVE, for testing only *************************************************/
 //#define Test_FileManagement 
 /******************************************************************************************/
+// /*************** REMOVE, for testing only *************************************************/
+// #define Test_FileManagement 
+// /******************************************************************************************/
 
-#ifdef Test_FileManagement
+// #ifdef Test_FileManagement
 
-int main()
-{
-	std::cout << std::endl << "Testing FileManagement";
-	std::cout << std::endl << "-----------------------------------------------------------------------" << std::endl;
+// int main()
+// {
+// 	std::cout << std::endl << "Testing FileManagement";
+// 	std::cout << std::endl << "-----------------------------------------------------------------------" << std::endl;
 
-	std::string input_directory = "C:\\Users\\Brandon Lee\\Documents\\Syracuse - MS CS\\CIS 687\\CIS 687 Projects\\Project1\\Project1\\TestInput\\\\\\";
-	std::string output_directory = "C:\\Users\\Brandon Lee\\Documents\\Syracuse - MS CS\\CIS 687\\CIS 687 Projects\\Project1\\Project1\\TestOutput\\";
+// 	std::string input_directory = "C:\\Users\\Brandon Lee\\Documents\\Syracuse - MS CS\\CIS 687\\CIS 687 Projects\\Project1\\Project1\\TestInput\\\\\\";
+// 	std::string output_directory = "C:\\Users\\Brandon Lee\\Documents\\Syracuse - MS CS\\CIS 687\\CIS 687 Projects\\Project1\\Project1\\TestOutput\\";
 
-	FileManagement f1;
+// 	FileManagement f1;
 	
-	f1.setInputDirectory(input_directory);
-	f1.setOutputDirectory(output_directory);
-	std::cout << f1.getInputDirectory() << std::endl;
-	std::cout << f1.getIntermediateDirectory() << std::endl;
-	std::cout << f1.getOutputDirectory() << std::endl;
+// 	f1.setInputDirectory(input_directory);
+// 	f1.setOutputDirectory(output_directory);
+// 	std::cout << f1.getInputDirectory() << std::endl;
+// 	std::cout << f1.getIntermediateDirectory() << std::endl;
+// 	std::cout << f1.getOutputDirectory() << std::endl;
 
-	std::cout << std::endl;
+// 	std::cout << std::endl;
 
-	bool is_dir = f1.verify_directory(input_directory);
-	std::cout << is_dir << std::endl;
-	is_dir = f1.verify_directory("im garbage and not a valid path");
-	std::cout << is_dir << std::endl;
+// 	bool is_dir = f1.verify_directory(input_directory);
+// 	std::cout << is_dir << std::endl;
+// 	is_dir = f1.verify_directory("im garbage and not a valid path");
+// 	std::cout << is_dir << std::endl;
 
-	std::vector<std::string> cur_dir = f1.list_files(input_directory);
-	for(std::string entry : cur_dir)
-	{
-		std::cout << entry << std::endl;
-	}
+// 	std::vector<std::string> cur_dir = f1.list_files(input_directory);
+// 	for(std::string entry : cur_dir)
+// 	{
+// 		std::cout << entry << std::endl;
+// 	}
 
-	// reads from a file
-	int i = 0;
-	std::vector<std::string> read_lines;
-	while (!f1.EndOfFile("fileA.txt")) {
-		read_lines.push_back(f1.readFile(input_directory, "fileA.txt"));
-		std::cout <<  read_lines[i] << std::endl;
-		i++;
-	}
+// 	// reads from a file
+// 	int i = 0;
+// 	std::vector<std::string> read_lines;
+// 	while (!f1.EndOfFile("fileA.txt")) {
+// 		read_lines.push_back(f1.readFile(input_directory, "fileA.txt"));
+// 		std::cout <<  read_lines[i] << std::endl;
+// 		i++;
+// 	}
 
-	// write to file
-	std::vector<int> count_a;
-	count_a.push_back(1);
-	count_a.push_back(1);
-	count_a.push_back(1);
-	count_a.push_back(1);
-	std::string word_a = "a";
+// 	// write to file
+// 	std::vector<int> count_a;
+// 	count_a.push_back(1);
+// 	count_a.push_back(1);
+// 	count_a.push_back(1);
+// 	count_a.push_back(1);
+// 	std::string word_a = "a";
 
-	std::vector<int> count_b;
-	count_b.push_back(1);
-	count_b.push_back(1);
-	count_b.push_back(1);
-	count_b.push_back(1);
-	std::string word_b = "b";
+// 	std::vector<int> count_b;
+// 	count_b.push_back(1);
+// 	count_b.push_back(1);
+// 	count_b.push_back(1);
+// 	count_b.push_back(1);
+// 	std::string word_b = "b";
 
-	std::vector<int> count_c;
-	count_c.push_back(1);
-	count_c.push_back(1);
-	count_c.push_back(1);
-	count_c.push_back(1);
-	std::string word_c = "c";
+// 	std::vector<int> count_c;
+// 	count_c.push_back(1);
+// 	count_c.push_back(1);
+// 	count_c.push_back(1);
+// 	count_c.push_back(1);
+// 	std::string word_c = "c";
 
-	std::map<std::string, std::vector<int>> output_lines;
-	output_lines.insert(std::pair<std::string, std::vector<int>>(word_a, count_a));
-	output_lines.insert(std::pair<std::string, std::vector<int>>(word_b, count_b));
-	output_lines.insert(std::pair<std::string, std::vector<int>>(word_c, count_c));
-	bool success = f1.writeFile(output_lines, output_directory, "outputA.txt");
+// 	std::map<std::string, std::vector<int>> output_lines;
+// 	output_lines.insert(std::pair<std::string, std::vector<int>>(word_a, count_a));
+// 	output_lines.insert(std::pair<std::string, std::vector<int>>(word_b, count_b));
+// 	output_lines.insert(std::pair<std::string, std::vector<int>>(word_c, count_c));
+// 	bool success = f1.writeFile(output_lines, output_directory, "outputA.txt");
 
 
-	std::cout << "\n\nEnd of Main\n\n";
-}
-#endif
+// 	std::cout << "\n\nEnd of Main\n\n";
+// }
+// #endif
 
 

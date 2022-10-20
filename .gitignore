@@ -9,3 +9,4 @@ Main
 *.~lock
 *.vscode
 *.swp
+.DS_Store
