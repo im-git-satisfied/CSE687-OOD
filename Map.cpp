@@ -17,7 +17,7 @@ void Map::tokenMap(std::string fileName, std::string line)
     while (ss >> buffer)
     {
         token = tokenize(buffer);
-        fileExport(token,1);  
+        fileExport(token,1);
     }
 }
 
@@ -41,26 +41,16 @@ std::string Map::tokenize(std::string token)
     return token;
 }
 
-// void Map::getTokenMap()
-// {
-//     // prints the contents of the map
-//     for (std::map<std::string,int>::iterator it = wordBuffer.begin(); it != wordBuffer.end(); ++it)
-//     {
-//         std::cout << "(" << it->first << "," << it->second << ")" << std::endl;
-//     }
-// }
-
 // export function
 void Map::fileExport(std::string word, int count)
 {
     std::vector<int> cVec;
     cVec.push_back(count);
     // add the unique token to the word buffer
-    wordBuffer.insert(make_pair(word,cVec));
+    wordBuffer.push_back(make_pair(word,cVec));
     if (wordBuffer.size() == 20)
     {
         // write out to file when the buffer is full
-        // getTokenMap();
         isFull = true;
     }
 }
