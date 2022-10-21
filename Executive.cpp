@@ -1,11 +1,4 @@
-#include "Sort.h"
 #include "Executive.h"
-//#include "FileManagement.h"
-//#include "Map.h"
-//#include "Reduce.h"
-#include <iterator>
-#include <utility>
-#include <typeinfo>
 
 Executive::Executive()
 {
@@ -18,21 +11,23 @@ Executive::Executive(int argc, char *argv[]) : count(argc), argv(argv)
 }
 
 void Executive::verify_count(void){
-    std::cout << count << std::endl;
+    if(DEBUG){
+        std::cout << "DEBUG >> NUMBER ARGS: " << count << std::endl;
+    }
     if (count != 4) {
         err = true;
-        Executive::err_out("ERR: Invalid number of arguments. See Help\n");
+        Executive::err_out("ERROR >> Invalid number of arguments. See Help\n");
     }
 
 }
 
 void Executive::print_help(void){
-    std::cout << "USAGE: ./MapReduce in_dir inter_dir out_dir" << std::endl;
+    std::cout << "USAGE >> ./MapReduce in_dir temp_dir out_dir\n\n" << std::endl;
 }
 
 void Executive::grab_dirs(void){
     in_dir = argv[1];
-    inter_dir = argv[2];
+    temp_dir = argv[2];
     out_dir = argv[3];
 }
 
@@ -46,10 +41,23 @@ int Executive::start() {
 
     verify_count();
     grab_dirs();
+    worker = new Workflow(in_dir, temp_dir, out_dir);
+    if(DEBUG){
+        std::cout << "DEBUGGING ENABLED" <<std::endl;
+        worker->DEBUG = true;
+    }
+    int err_code = worker->start();
 
+    if(err_code > 0){
+        std::cout << "executed successfully" <<std::endl; 
+    }
+
+
+    /*
     SortMap *sorter = new SortMap();
     std::vector<std::string> keys = { "the", "brown", "fox", "jumped", "over", "the", "big", "brown", "fox"};
 
+    /*
     for (auto& key: keys) {
         for (auto x = 0; x < 25; x++) {
             sorter->sort(key, 1);
@@ -67,15 +75,18 @@ int Executive::start() {
     }
 
     return 1;
+    */
+   return 0;
 
 }
 
-#define Test_Drive 
+//#define Test_Drive 
 #ifdef Test_Drive 
 
 int main(int argc, char *argv[]) {
 
     Executive *exec = new Executive(argc, argv);
+    exec->DEBUG = true;
     exec->start();
 
 }
