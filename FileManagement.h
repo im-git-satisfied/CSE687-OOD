@@ -1,10 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <string>
 #include <unordered_map>
 #include <map>
-
 
 class FileManagement
 {
@@ -26,11 +24,10 @@ public:
 	void setIntermediateDirectory(std::string name);
 	void setOutputDirectory(std::string name);
 
-	bool writeFile(std::map<std::string, std::vector<int>> data, std::string directory_name, std::string file_name);
-	std::string readFile(std::string directory_name, std::string file_name);
 	bool verify_directory(std::string directory_name);
 	std::vector<std::string> list_files(std::string directory_name);
 	bool EndOfFile(std::string file_name);
-
+	bool writeFile(std::vector <std::pair<std::string, std::vector<int>>> data, std::string directory_name, std::string file_name);
+	std::string readFile(std::string directory_name, std::string file_name);
 };
 
