@@ -42,11 +42,16 @@ TEST(Map, tokenizeTest)
 {
     Map temp;
     std::string fileName = "test";
-    std::string line = "Apple, breaD CAT isn't happy.";
+    std::string line = "Apple, breaD CAT isn't happy. [Abstract";
 
     temp.tokenMap(fileName,line);
 
     EXPECT_EQ(temp.wordBuffer[0].first,"apple");
+    EXPECT_EQ(temp.wordBuffer[1].first,"bread");
+    EXPECT_EQ(temp.wordBuffer[2].first,"cat");
+    EXPECT_EQ(temp.wordBuffer[3].first,"isnt");
+    EXPECT_EQ(temp.wordBuffer[4].first,"happy");
+    EXPECT_EQ(temp.wordBuffer[5].first,"abstract");
 }
 
 int main(int ac, char* av[])
