@@ -4,20 +4,26 @@
 Reduce::Reduce()
 {}
 
-void Reduce::reduce(std::string word, std::vector<int> counts)
+// reduce function
+std::vector<std::pair<std::string,std::vector<int>>> Reduce::reduce(std::string word, std::vector<int> counts)
 {
     int reducedValue = 0;
     for (int i = 0; i < counts.size(); i++)
     {
         reducedValue++;
     }
-
-    exportReduce(word,reducedValue);
+    // calls the exportReduce function
+    return exportReduce(word,reducedValue);
 }
 
-void Reduce::exportReduce(std::string word, int reducedValue)
+// exportReduce that creates the vector to pass to the file management
+std::vector<std::pair<std::string,std::vector<int>>> Reduce::exportReduce(std::string word, int reducedValue)
 {
-    std::cout << "(" << word << "," << reducedValue << ")" << std::endl;
-    // export out the file management
+    std::vector<std::pair<std::string,std::vector<int>>> wordCount;
+    // create a vector to export out the file management
+    std::vector<int> cVec;
+    cVec.push_back(reducedValue);
+    wordCount.push_back(make_pair(word,cVec));
+    return wordCount;
 }
 

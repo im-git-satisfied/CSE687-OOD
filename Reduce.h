@@ -10,8 +10,8 @@ class Reduce
 {
     public:
         explicit Reduce();
-        void reduce(std::string key, std::vector<int> values);
+        std::vector<std::pair<std::string,std::vector<int>>> reduce(std::string key, std::vector<int> values);
     
     private:
-        void exportReduce(std::string key, int value);
+        std::vector<std::pair<std::string,std::vector<int>>> exportReduce(std::string key, int value);
 };
