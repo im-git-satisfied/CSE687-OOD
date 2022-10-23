@@ -1,12 +1,5 @@
 #include "FileManagement.h"
 
-#include <iostream>
-#include <fstream>
-#include <filesystem>
-#include <iomanip>
-#include <vector>
-#include <iterator>
-
 FileManagement::FileManagement() 
 {
 	std::cout << "Creating FileManagement Class" << std::endl;
@@ -77,6 +70,13 @@ std::vector<std::string> FileManagement::list_files(std::string directory_name)
 // Check if the file is at EOF
 bool FileManagement::EndOfFile(std::string filename)
 {
+	if (inputFiles[filename] == -1) {
+		inputFiles[filename] = 0;
+		return true;
+	}
+	else {
+		return false;
+	}
 	return (inputFiles[filename] == -1) ? true : false;
 }
 
@@ -170,9 +170,9 @@ bool FileManagement::writeFile(std::vector <std::pair<std::string, std::vector<i
 
 
 /*************** REMOVE, for testing only *************************************************/
-#define Test_FileManagement 
+//#define Test_FileManagement 
 /******************************************************************************************/
-
+/*
 #ifdef Test_FileManagement
 
 int main()
@@ -249,5 +249,6 @@ int main()
 	std::cout << "\n\nEnd of Main\n\n";
 }
 #endif
+*/
 
 
