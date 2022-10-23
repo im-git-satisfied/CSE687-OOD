@@ -36,6 +36,8 @@ class SortMap
 
         std::map<std::string, std::vector<int>>::iterator end(void);
 
+        void clear();
+
         // check and see if the map is empty. 
         bool is_empty(void);
 

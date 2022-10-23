@@ -134,6 +134,7 @@ void Workflow::reduce_file(std::string file){
         }
         fm->writeFile(reducer->reduce(x->first, x->second), target_dir, file);
     }
+    sorter->clear();
 
     
 }

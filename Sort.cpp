@@ -15,7 +15,9 @@ SortMap::SortMap(bool DEBUG) : DEBUG(DEBUG)
         std::cout << "DEBUG >> SORTMAP CLASS INITIALIZED" << std::endl;
     }
 }
-
+void SortMap::clear(void){
+    words.clear();
+}
 void SortMap::add (std::string key, int value) {
                 if(DEBUG){
                     std::cout << "DEBUG >> ADDING TO SORT MAP " << std::endl; 
@@ -50,6 +52,7 @@ void SortMap::sort(std::string line) {
         }
         else {
             key = token;
+            
         }
     }
 
