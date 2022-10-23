@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 
 class SortMap
@@ -18,12 +19,18 @@ class SortMap
         // update the number of occurrences to the key's value. 
         void update (std::string key, int value);
 
+        std::string tokenize(std::string word);
+
+        bool DEBUG;
+
     public:
         //SortMap();
         explicit SortMap();
+        explicit SortMap(bool DEBUG);
         // used to sort key, value pairs
-        void sort(std::string key,  int value);
 
+        void sort(std::string line);
+    
         // grab items from the list. 
         std::map<std::string, std::vector<int>>::iterator begin(void);
 

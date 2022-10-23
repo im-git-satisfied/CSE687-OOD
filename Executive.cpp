@@ -5,9 +5,11 @@ Executive::Executive()
     
 }
 
-Executive::Executive(int argc, char *argv[]) : count(argc), argv(argv) 
+Executive::Executive(int argc, char *argv[], bool DEBUG) : count(argc), argv(argv), DEBUG(DEBUG) 
 {
-
+    if(DEBUG){
+        std::cout << "DEBUG >> EXECUTIVE CLASS INITIALIZED" << std::endl;
+    }
 }
 
 void Executive::verify_count(void){
@@ -41,11 +43,8 @@ int Executive::start() {
 
     verify_count();
     grab_dirs();
-    worker = new Workflow(in_dir, temp_dir, out_dir);
-    if(DEBUG){
-        std::cout << "DEBUGGING ENABLED" <<std::endl;
-        worker->DEBUG = true;
-    }
+    worker = new Workflow(in_dir, temp_dir, out_dir, DEBUG);
+    
     int err_code = worker->start();
 
     if(err_code > 0){

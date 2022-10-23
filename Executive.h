@@ -20,7 +20,7 @@ class Executive
         std::string temp_dir;
         std::string out_dir;
         Workflow *worker;
-
+        bool DEBUG;
 
         bool err;
         char **argv;
@@ -28,9 +28,9 @@ class Executive
     public:
         
         explicit Executive();
-        explicit Executive(int argc, char** argv);
+        explicit Executive(int argc, char** argv, bool DEBUG);
 
-        bool DEBUG = false;
+        
 
         void verify_count(void);
 

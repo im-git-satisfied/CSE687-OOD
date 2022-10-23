@@ -77,7 +77,14 @@ std::vector<std::string> FileManagement::list_files(std::string directory_name)
 // Check if the file is at EOF
 bool FileManagement::EndOfFile(std::string filename)
 {
-	return (inputFiles[filename] == -1) ? true : false;
+	if(inputFiles[filename] == -1){
+		inputFiles[filename] = 0;
+		return true;
+	}
+	else {
+		return false;
+	}
+	//return (inputFiles[filename] == -1) ? true : false;
 }
 
 // reads a line from the specified directory and file name
@@ -126,9 +133,9 @@ std::string FileManagement::readFile(std::string directory, std::string filename
 }
 
 // if file exists, it will append each input as its own row
-// ("a", [1, 1, …])
-// ("the", [1, 1, …])
-// ("is", [1, …])
+// ("a", [1, 1, ï¿½])
+// ("the", [1, 1, ï¿½])
+// ("is", [1, ï¿½])
 bool FileManagement::writeFile(std::vector <std::pair<std::string, std::vector<int>>> data, std::string directory, std::string filename)
 {
 	#ifdef _WIN64
