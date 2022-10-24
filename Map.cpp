@@ -17,7 +17,10 @@ void Map::tokenMap(std::string fileName, std::string line)
     while (ss >> buffer)
     {
         token = tokenize(buffer);
-        fileExport(token,1);
+        if (!(token == ""))
+        {
+            fileExport(token,1);
+        }
     }
 }
 
