@@ -40,7 +40,7 @@ void SortMap::sort(std::string line) {
     std::string token;
 
     std::string key;
-    int value;
+    int value = 0;
     
     std::stringstream ss(line);
 
@@ -103,7 +103,7 @@ std::string SortMap::tokenize(std::string token)
     int len = token.size();
     for (int i = 0; i < len; i++)
     {
-        if (ispunct(token[i]))
+        if (ispunct((unsigned char)token[i]))
         {
             token.erase(i--,1);
             len = token.size();

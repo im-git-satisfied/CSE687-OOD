@@ -28,7 +28,7 @@ std::string Map::tokenize(std::string token)
     int len = token.size();
     for (int i = 0; i < len; i++)
     {
-        if (ispunct(token[i]))
+        if (ispunct((unsigned char)token[i]))
         {
             token.erase(i--,1);
             len = token.size();
