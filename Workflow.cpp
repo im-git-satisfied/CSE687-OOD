@@ -140,6 +140,7 @@ void Workflow::reduce_file(std::string file){
 }
 
 
+
 int Workflow::start(void){
 
     Workflow::verify_dirs();
@@ -147,6 +148,8 @@ int Workflow::start(void){
     Workflow::map_files();
 
     Workflow::reduce_files();
+
+    //Workflow::finish();
 
     return 1;
 }

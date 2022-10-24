@@ -56,11 +56,13 @@ void SortMap::sort(std::string line) {
         }
     }
 
-    if (this->words.count(key) == 0) {
-            this->add(key, value);
-        } else {
-            this->update(key, value);
-        }
+    if (key != "" ) {
+        if (this->words.count(key) == 0) {
+                this->add(key, value);
+            } else {
+                this->update(key, value);
+            }
+    }
 }
 
             // grab items from the list. 
