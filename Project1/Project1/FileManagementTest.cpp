@@ -113,6 +113,7 @@ TEST(FileManagement, listFiles) {
 	files.push_back(dirA);
 	files.push_back(fileA);
 	files.push_back(fileB);
+	files.push_back("SUCCESS.txt");
 
 	std::vector<std::string> result = f1.list_files(dir);
 
