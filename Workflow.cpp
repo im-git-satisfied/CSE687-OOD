@@ -139,7 +139,10 @@ void Workflow::reduce_file(std::string file){
     
 }
 
-
+void Workflow::finish(void){
+    std::cout << "writing SUCCESS to " << out_dir << std::endl;
+    fm->writeFileSuccess(out_dir, "SUCCESS");
+}
 
 int Workflow::start(void){
 
@@ -149,7 +152,7 @@ int Workflow::start(void){
 
     Workflow::reduce_files();
 
-    //Workflow::finish();
+    Workflow::finish();
 
     return 1;
 }

@@ -33,7 +33,7 @@ class Workflow
 
         bool DEBUG = false;
 
-        //void finish(void);
+        void finish(void);
 
     public:
         
