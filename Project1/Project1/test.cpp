@@ -131,6 +131,17 @@ TEST(FileManagement, readFile) {
 	EXPECT_EQ(result, conA);
 }
 
+TEST(FileManagement, writeFileSuccess) {
+	FileManagement f1;
+
+	std::string dir = DIR;
+	std::string file = "SUCCESS.txt";
+
+	bool result = f1.writeFileSuccess(dir, file);
+
+	EXPECT_TRUE(result);
+}
+
 TEST(FileManagement, writeFile) {
 	FileManagement f1;
 

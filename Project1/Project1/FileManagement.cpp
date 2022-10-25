@@ -152,22 +152,52 @@ bool FileManagement::writeFile(std::vector <std::pair<std::string, std::vector<i
 	std::string cur_file = directory + filename;
 	std::ofstream newfile;
 	newfile.open(cur_file, std::ofstream::app);
-	
-	for (int i = 0; i < data.size(); i++) {
-		std::pair<std::string, std::vector<int>> pair = data[i];
-		std::string first = pair.first;
-		std::vector<int> second = pair.second;
+	if (newfile.is_open()) {
+		for (int i = 0; i < data.size(); i++) {
+			std::pair<std::string, std::vector<int>> pair = data[i];
+			std::string first = pair.first;
+			std::vector<int> second = pair.second;
 
-		newfile << "(\"" <<	first << "\", [" << second[0];
-		for (int i = 1; i < second.size(); i++) {
-			newfile << ", " << second[i];
+			newfile << "(\"" << first << "\", [" << second[0];
+			for (int i = 1; i < second.size(); i++) {
+				newfile << ", " << second[i];
+			}
+			newfile << "])" << std::endl;
 		}
-		newfile << "])" << std::endl;
+		return true;
 	}
-
-	return true;
+	
+	return false;
 }
 
+bool FileManagement::writeFileSuccess(std::string directory, std::string filename)
+{
+	#ifdef _WIN64
+		if (directory.back() != '\\') {
+			directory = directory + '\\';
+		}
+	#elif _WIN32
+		if (directory.back() != '\\') {
+			directory = directory + '\\';
+		}
+	#elif __APPLE__
+		if (directory.back() != '/') {
+			directory = directory + '/';
+		}
+	#elif __linux
+		if (directory.back() != '/') {
+			directory = directory + '/';
+		}
+	#endif
+
+	std::string cur_file = directory + filename;
+	std::ofstream newfile;
+	newfile.open(cur_file, std::ofstream::app);
+	if (newfile.is_open()) {
+		return true;
+	}
+	return false;
+}
 
 /*************** REMOVE, for testing only *************************************************/
 //#define Test_FileManagement 

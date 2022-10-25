@@ -34,6 +34,7 @@ public:
 	std::vector<std::string> list_files(std::string directory_name);
 	bool EndOfFile(std::string file_name);
 	bool writeFile(std::vector <std::pair<std::string, std::vector<int>>> data, std::string directory_name, std::string file_name);
+	bool writeFileSuccess(std::string directory_name, std::string file_name);
 	std::string readFile(std::string directory_name, std::string file_name);
 };
 
