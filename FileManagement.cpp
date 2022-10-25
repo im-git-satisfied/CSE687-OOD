@@ -1,12 +1,5 @@
 #include "FileManagement.h"
 
-#include <iostream>
-#include <fstream>
-#include <filesystem>
-#include <iomanip>
-#include <vector>
-#include <iterator>
-
 FileManagement::FileManagement() 
 {
 	std::cout << "Creating FileManagement Class" << std::endl;
@@ -77,14 +70,14 @@ std::vector<std::string> FileManagement::list_files(std::string directory_name)
 // Check if the file is at EOF
 bool FileManagement::EndOfFile(std::string filename)
 {
-	if(inputFiles[filename] == -1){
+	if (inputFiles[filename] == -1) {
 		inputFiles[filename] = 0;
 		return true;
 	}
 	else {
 		return false;
 	}
-	//return (inputFiles[filename] == -1) ? true : false;
+	return (inputFiles[filename] == -1) ? true : false;
 }
 
 // reads a line from the specified directory and file name
@@ -133,9 +126,9 @@ std::string FileManagement::readFile(std::string directory, std::string filename
 }
 
 // if file exists, it will append each input as its own row
-// ("a", [1, 1, ï¿½])
-// ("the", [1, 1, ï¿½])
-// ("is", [1, ï¿½])
+// ("a", [1, 1, …])
+// ("the", [1, 1, …])
+// ("is", [1, …])
 bool FileManagement::writeFile(std::vector <std::pair<std::string, std::vector<int>>> data, std::string directory, std::string filename)
 {
 	#ifdef _WIN64
@@ -159,22 +152,52 @@ bool FileManagement::writeFile(std::vector <std::pair<std::string, std::vector<i
 	std::string cur_file = directory + filename;
 	std::ofstream newfile;
 	newfile.open(cur_file, std::ofstream::app);
-	
-	for (int i = 0; i < data.size(); i++) {
-		std::pair<std::string, std::vector<int>> pair = data[i];
-		std::string first = pair.first;
-		std::vector<int> second = pair.second;
+	if (newfile.is_open()) {
+		for (int i = 0; i < data.size(); i++) {
+			std::pair<std::string, std::vector<int>> pair = data[i];
+			std::string first = pair.first;
+			std::vector<int> second = pair.second;
 
-		newfile << "(\"" <<	first << "\", [" << second[0];
-		for (int i = 1; i < second.size(); i++) {
-			newfile << ", " << second[i];
+			newfile << "(\"" << first << "\", [" << second[0];
+			for (int i = 1; i < second.size(); i++) {
+				newfile << ", " << second[i];
+			}
+			newfile << "])" << std::endl;
 		}
-		newfile << "])" << std::endl;
+		return true;
 	}
-
-	return true;
+	
+	return false;
 }
 
+bool FileManagement::writeFileSuccess(std::string directory, std::string filename)
+{
+	#ifdef _WIN64
+		if (directory.back() != '\\') {
+			directory = directory + '\\';
+		}
+	#elif _WIN32
+		if (directory.back() != '\\') {
+			directory = directory + '\\';
+		}
+	#elif __APPLE__
+		if (directory.back() != '/') {
+			directory = directory + '/';
+		}
+	#elif __linux
+		if (directory.back() != '/') {
+			directory = directory + '/';
+		}
+	#endif
+
+	std::string cur_file = directory + filename;
+	std::ofstream newfile;
+	newfile.open(cur_file, std::ofstream::app);
+	if (newfile.is_open()) {
+		return true;
+	}
+	return false;
+}
 
 /*************** REMOVE, for testing only *************************************************/
 //#define Test_FileManagement 
@@ -256,6 +279,6 @@ int main()
 	std::cout << "\n\nEnd of Main\n\n";
 }
 #endif
-
 */
+
 
