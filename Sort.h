@@ -19,6 +19,7 @@ class SortMap
         // update the number of occurrences to the key's value. 
         void update (std::string key, int value);
 
+        // break out line in to word, count
         std::string tokenize(std::string word);
 
         bool DEBUG;
@@ -27,13 +28,14 @@ class SortMap
         //SortMap();
         explicit SortMap();
         explicit SortMap(bool DEBUG);
-        // used to sort key, value pairs
 
+        // used to sort key, value pairs
         void sort(std::string line);
     
         // grab items from the list. 
         std::map<std::string, std::vector<int>>::iterator begin(void);
 
+        // Identify end of Map
         std::map<std::string, std::vector<int>>::iterator end(void);
 
         void clear();

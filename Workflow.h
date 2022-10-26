@@ -16,47 +16,46 @@ class Workflow
 {
     private:
 
-        std::string in_dir;
-        std::string temp_dir;
-        std::string out_dir;
+        std::string in_dir;                     // user provided input dir
+        std::string temp_dir;                   // user provided temp dir
+        std::string out_dir;                    // user provided out dir
 
-        std::string curr_dir;
-        std::string target_dir;
+        std::string curr_dir;                   // current read directory 
+        std::string target_dir;                 // current write directory 
         
+        std::vector<std::string> file_list;     // file list of curr_dir
 
-        std::vector<std::string> file_list; 
+        SortMap *sorter;                        // sort class 
+        Map *mapper;                            // map class
+        FileManagement *fm ;                    // file management class
+        Reduce *reducer;                        // reduce class 
 
-        SortMap *sorter;
-        Map *mapper; 
-        FileManagement *fm ;
-        Reduce *reducer;
+        bool DEBUG = false;                     // Debug flag
 
-        bool DEBUG = false;
+        void finish(void);                      // final workflow tasks (write SUCCESS file)
 
-        void finish(void);
+        void map_files(void);                   // iterate over files for mapping 
+        void map_file(std::string file);        // map individual files
+
+        void reduce_files(void);                // iterate over files for reducing
+        void reduce_file(std::string file);     // reduce individual files 
+        
+        void verify_dirs(void);                 // verify user input 
+
+        void list_files(void);                  // list the files for a respective directory
+
+        //void err_out(std::string);
+
+        
 
     public:
         
+        // constructors 
         explicit Workflow();
         explicit Workflow(std::string in_dir, std::string temp_dir, std::string out_dir, bool DEBUG);
 
-        void map_files(void);
-        void map_file(std::string file);
+        int start();                            // kick off Workflow class
 
-        void reduce_files(void);
-        void reduce_file(std::string file);
-        
-        //void iter_files(void);
-
-        void verify_dirs(void);
-
-        void list_files(void);
-
-        //void read_file(void);
-
-        void err_out(std::string);
-
-        int start();
 };
 
 #endif

@@ -1,23 +1,25 @@
 #include "Sort.h"
 
 
-//using namespace MapReduce;
-//using namespace std;
-
 SortMap::SortMap()
 {
     
 }
 
+// constructor
 SortMap::SortMap(bool DEBUG) : DEBUG(DEBUG)
 {
     if(DEBUG){
         std::cout << "DEBUG >> SORTMAP CLASS INITIALIZED" << std::endl;
     }
 }
+
+// clear the sort map that is built up for each file
 void SortMap::clear(void){
     words.clear();
 }
+
+// add an item to the sortmap
 void SortMap::add (std::string key, int value) {
                 if(DEBUG){
                     std::cout << "DEBUG >> ADDING TO SORT MAP " << std::endl; 
@@ -26,6 +28,7 @@ void SortMap::add (std::string key, int value) {
                 this->words.insert({key, container});
             }
 
+// update the count of an item in the sort map
 void SortMap::update (std::string key, int value){
                 if(DEBUG){
                     std::cout << "DEBUG >> UPDATING SORT MAP " << std::endl; 
@@ -44,6 +47,7 @@ void SortMap::sort(std::string line) {
     
     std::stringstream ss(line);
 
+    // used to split the line read into word, count 
     while (ss >> buffer)
     {
         token = tokenize(buffer);
@@ -56,6 +60,8 @@ void SortMap::sort(std::string line) {
         }
     }
 
+    // if the key is empty strings, we don't 
+    // want to keep that value 
     if (key != "" ) {
         if (this->words.count(key) == 0) {
                 this->add(key, value);
@@ -65,15 +71,17 @@ void SortMap::sort(std::string line) {
     }
 }
 
-            // grab items from the list. 
+// grab items from the list. 
 std::map<std::string, std::vector<int>>::iterator SortMap::begin(void){
     return this->words.begin();
 }
 
+// identify the end of the list 
 std::map<std::string, std::vector<int>>::iterator SortMap::end(void){
     return this->words.end();
 }
-            // check and see if the map is empty. 
+
+// check and see if the map is empty. 
 bool SortMap::is_empty(void){
     return this->words.empty();
 }

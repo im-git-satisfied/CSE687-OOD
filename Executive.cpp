@@ -12,6 +12,8 @@ Executive::Executive(int argc, char *argv[], bool DEBUG) : count(argc), argv(arg
     }
 }
 
+// Verify Count
+// ensure that the number of command line arguments are valid. 
 void Executive::verify_count(void){
     if(DEBUG){
         std::cout << "DEBUG >> NUMBER ARGS: " << count << std::endl;
@@ -23,16 +25,20 @@ void Executive::verify_count(void){
 
 }
 
+// print the help message 
 void Executive::print_help(void){
     std::cout << "USAGE >> ./MapReduce in_dir temp_dir out_dir\n\n" << std::endl;
 }
 
+
+// access the directories passed in from the command line 
 void Executive::grab_dirs(void){
     in_dir = argv[1];
     temp_dir = argv[2];
     out_dir = argv[3];
 }
 
+// err_out if command the wrong number of arguments are passed 
 void Executive::err_out(std::string err_msg) {
     std::cout << err_msg << std::endl;
     print_help();
@@ -41,41 +47,23 @@ void Executive::err_out(std::string err_msg) {
 
 int Executive::start() {
 
-    verify_count();
-    grab_dirs();
+    verify_count();         //verify dirs, err out if it's the wrong number 
+    grab_dirs();            // grab the directories, used to pass to Workflow
+
+    // create a Workflow class
     worker = new Workflow(in_dir, temp_dir, out_dir, DEBUG);
     
+    // Workflow.start() returns 1 on success 
     int err_code = worker->start();
 
-    if(err_code > 0){
-        std::cout << "executed successfully" <<std::endl; 
+    if(err_code == 1){
+        std::cout << " >> Executed Successfully" << std::endl; 
+        return 1;
     }
-
-
-    /*
-    SortMap *sorter = new SortMap();
-    std::vector<std::string> keys = { "the", "brown", "fox", "jumped", "over", "the", "big", "brown", "fox"};
-
-    /*
-    for (auto& key: keys) {
-        for (auto x = 0; x < 25; x++) {
-            sorter->sort(key, 1);
-        }
+    else{
+        std::cout << " >> Executed Unsuccessfully" << std::endl;
+        return 0;
     }
-    
-    // 
-    auto word_iter = sorter->begin();
-    for (word_iter; word_iter != sorter->end(); word_iter++){
-        std::cout << "key = " << word_iter->first << "\n";
-        for (auto x = word_iter->second.begin(); x != word_iter->second.end(); x++){
-            std::cout << *x << "";
-        }
-        std::cout << "\n";
-    }
-
-    return 1;
-    */
-   return 0;
 
 }
 
