@@ -4,19 +4,36 @@
 Reduce::Reduce()
 {}
 
-void Reduce::reduce(std::string word, std::vector<int> counts)
+// reduce function
+std::vector<std::pair<std::string,std::vector<int>>> Reduce::reduce(std::string word, std::vector<int> counts)
 {
     int reducedValue = 0;
     for (int i = 0; i < counts.size(); i++)
     {
         reducedValue++;
     }
-
-    exportReduce(word,reducedValue);
+    // calls the exportReduce function
+    fileExport(word,reducedValue);
+    return getBuffer();
 }
 
-void Reduce::exportReduce(std::string word, int reducedValue)
+// fileExport that creates the vector to pass to the file management
+void Reduce::fileExport(std::string word, int reducedValue)
 {
-    std::cout << "(" << word << "," << reducedValue << ")" << std::endl;
-    // export out the file management
+    clearBuffer();
+    // create a vector to export out the file management
+    std::vector<int> cVec;
+    cVec.push_back(reducedValue);
+    reduceBuffer.push_back(make_pair(word,cVec));
 }
+
+std::vector<std::pair<std::string,std::vector<int>>> Reduce::getBuffer()
+{
+    return reduceBuffer;
+}
+
+void Reduce::clearBuffer()
+{
+    reduceBuffer.clear();
+}
+

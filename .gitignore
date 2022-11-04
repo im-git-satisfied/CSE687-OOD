@@ -6,4 +6,7 @@ x64
 build/
 Main
 *dSYM
+*.~lock
+*.vscode
+*.swp
 .DS_Store
