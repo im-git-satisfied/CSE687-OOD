@@ -19,6 +19,8 @@ class Workflow
         std::string in_dir;                     // user provided input dir
         std::string temp_dir;                   // user provided temp dir
         std::string out_dir;                    // user provided out dir
+        const std::string DEFAULT_TEMP = "TEMP_DIR";
+        const std::string DEFAULT_OUT = "OUT_DIR";
 
         std::string curr_dir;                   // current read directory 
         std::string target_dir;                 // current write directory 

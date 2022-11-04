@@ -16,8 +16,8 @@ class Executive
     private:
         
         int count;
-        std::string DEFAULT_TEMP = "TEMP_DIR";
-        std::string DEFAULT_OUT = "OUT_DIR";
+        const std::string DEFAULT_TEMP = "TEMP_DIR";
+        const std::string DEFAULT_OUT = "OUT_DIR";
         std::string in_dir;
         std::string temp_dir;
         std::string out_dir;

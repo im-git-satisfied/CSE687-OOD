@@ -86,7 +86,7 @@ void Executive::parse_args(void){
 void Executive::print_help(void){
     std::cout << "\tUSAGE >> " << argv[0] << " {in_dir} {temp_dir} {out_dir}\n" << std::endl;
     std::cout << "\t-h, -help, --h, --help: print help message" << std::endl; 
-    std::cout << "\tin_dir: \t\t\REQUIRED: directory path containing files to be map reduced" << std::endl; 
+    std::cout << "\tin_dir: \t\tREQUIRED: directory path containing files to be map reduced" << std::endl; 
     std::cout << "\ttemp_dir: \t\tDEFAULT - TEMP_DIR: directory path to location of mapped/intermediary files. " << std::endl; 
     std::cout << "\tout_dir: \t\tDEFAULT - OUT_DIR: directory path to location of reduced/final files. " << std::endl; 
 }
