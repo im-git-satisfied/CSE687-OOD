@@ -1,21 +1,21 @@
-#include "Function.h"
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iterator>
 
-
-
-class Map :
-    public Function
+class Map
 {
     public:
-        Map();
-        virtual void clearBuffer() override;
+        explicit Map();
         void tokenMap(std::string key, std::string value);
-        virtual std::vector<std::pair<std::string,std::vector<int>>> getBuffer() override;
 
         bool isFull;
         std::vector<std::pair<std::string,std::vector<int>>> wordBuffer;
+        void clearBuffer();
     
     private:
         std::string tokenize(std::string word);
-        // void fileExport(std::string key, int value);
-        virtual void fileExport(std::string key, int value) override;
+        void fileExport(std::string key, int value);
 };
