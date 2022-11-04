@@ -1,17 +1,17 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <sstream>
-#include <map>
-#include <iterator>
-#include <array>
+#include "Function.h"
 
-class Reduce
+class Reduce :
+    public Function
 {
     public:
-        explicit Reduce();
+        Reduce();
+        virtual void clearBuffer() override;
+        virtual std::vector<std::pair<std::string,std::vector<int>>> getBuffer() override;
         std::vector<std::pair<std::string,std::vector<int>>> reduce(std::string key, std::vector<int> values);
     
     private:
-        std::vector<std::pair<std::string,std::vector<int>>> exportReduce(std::string key, int value);
+        void exportReduce(std::string key, int value);
+        virtual void fileExport(std::string key, int value) override;
+        std::vector<std::pair<std::string,std::vector<int>>> reduceBuffer;
+
 };

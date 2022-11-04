@@ -63,3 +63,8 @@ void Map::clearBuffer()
     wordBuffer.clear();
     isFull = false;
 }
+
+std::vector<std::pair<std::string,std::vector<int>>> Map::getBuffer()
+{
+    return wordBuffer;
+}
