@@ -1,9 +1,6 @@
-#include "Function.h"
+#include "BaseMapReduce.h"
 
-
-
-class Map :
-    public Function
+class Map : public BaseMapReduce
 {
     public:
         Map();

@@ -1,7 +1,6 @@
-#include "Function.h"
+#include "BaseMapReduce.h"
 
-class Reduce :
-    public Function
+class Reduce : public BaseMapReduce
 {
     public:
         Reduce();
