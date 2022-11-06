@@ -14,7 +14,7 @@ std::vector<std::pair<std::string,std::vector<int>>> Reduce::reduce(std::string 
     }
     // calls the exportReduce function
     fileExport(word,reducedValue);
-    return getBuffer();
+    return reduceBuffer;
 }
 
 // fileExport that creates the vector to pass to the file management
@@ -25,11 +25,6 @@ void Reduce::fileExport(std::string word, int reducedValue)
     std::vector<int> cVec;
     cVec.push_back(reducedValue);
     reduceBuffer.push_back(make_pair(word,cVec));
-}
-
-std::vector<std::pair<std::string,std::vector<int>>> Reduce::getBuffer()
-{
-    return reduceBuffer;
 }
 
 void Reduce::clearBuffer()

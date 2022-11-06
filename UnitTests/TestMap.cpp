@@ -11,7 +11,7 @@ TEST(Map, BuildTokenMap)
 
     temp.tokenMap(fileName,line);
 
-    EXPECT_EQ(temp.wordBuffer.size(),4);
+    EXPECT_EQ(temp.getWordBuffer().size(),4);
 }
 
 TEST(Map, isFullBuffer)
@@ -22,8 +22,8 @@ TEST(Map, isFullBuffer)
 
     temp.tokenMap(fileName,line);
 
-    EXPECT_EQ(temp.wordBuffer.size(),20);
-    ASSERT_TRUE(temp.isFull);
+    EXPECT_EQ(temp.getWordBuffer().size(),20);
+    ASSERT_TRUE(temp.checkIsFull());
 }
 
 TEST(Map, ClearBuffer)
@@ -34,8 +34,8 @@ TEST(Map, ClearBuffer)
 
     temp.clearBuffer();
 
-    EXPECT_EQ(temp.wordBuffer.size(),0);
-    ASSERT_FALSE(temp.isFull);
+    EXPECT_EQ(temp.getWordBuffer().size(),0);
+    ASSERT_FALSE(temp.checkIsFull());
 }
 
 TEST(Map, tokenizeTest)

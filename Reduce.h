@@ -1,16 +1,14 @@
-#include "BaseReduce.h"
+#include "ReduceInterface.h"
 
-class Reduce : public BaseReduce
+class Reduce : public ReduceInterface
 {
     public:
         Reduce();
-        virtual void clearBuffer() override;
-        virtual std::vector<std::pair<std::string,std::vector<int>>> getBuffer() override;
-        std::vector<std::pair<std::string,std::vector<int>>> reduce(std::string key, std::vector<int> values);
+        virtual std::vector<std::pair<std::string,std::vector<int>>> reduce(std::string key, std::vector<int> values) override;
     
     private:
-        void exportReduce(std::string key, int value);
-        virtual void fileExport(std::string key, int value) override;
-        std::vector<std::pair<std::string,std::vector<int>>> reduceBuffer;
+        void clearBuffer();
+        void fileExport(std::string key, int value);
 
+        std::vector<std::pair<std::string,std::vector<int>>> reduceBuffer;
 };
