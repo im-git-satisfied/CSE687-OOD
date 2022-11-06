@@ -16,11 +16,13 @@ class Executive
     private:
         
         int count;
-        const std::string DEFAULT_TEMP = "TEMP_DIR";
-        const std::string DEFAULT_OUT = "OUT_DIR";
+        bool DEFAULT_TEMP = true;
+        bool DEFAULT_OUT = true;
         std::string in_dir;
-        std::string temp_dir;
-        std::string out_dir;
+        std::string temp_dir = "TEMP_DIR";
+        std::string out_dir = "OUT_DIR";
+        std::string map_dll;
+        std::string reduce_dll; 
         Workflow *worker;
         bool DEBUG;
 

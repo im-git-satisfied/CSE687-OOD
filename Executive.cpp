@@ -37,26 +37,64 @@ void Executive::parse_args(void){
         std::cout << "DEBUG >> NUMBER ARGS: " << count << std::endl;
     }
 
-    if (count == 1) {
+    if (count < 4) {
         err = true;
         Executive::err_out(err_str);
     }
+    
+    in_dir = argv[1];
+    map_dll = argv[2];
+    reduce_dll = argv[3];
 
     for(i; i < count ; i++){
-        if(std::string(argv[1]) == "-h"){
+        if(std::string(argv[i]) == "-h"){
             Executive::err_out("");
         }
-        if(std::string(argv[1]) == "-help"){
+        else if(std::string(argv[i]) == "-help"){
             Executive::err_out("");
         }
-        if(std::string(argv[1]) == "--h"){
+        else if(std::string(argv[i]) == "--h"){
             Executive::err_out("");
         }
-        if(std::string(argv[1]) == "--help"){
+        else if(std::string(argv[i]) == "--help"){
             Executive::err_out("");
         }
+        else if(std::string(argv[i]) == "-t") {
+            if( i < 4){
+                Executive::err_out("Missing positional arguments");
+            }
+            i+=1;
+            if (i <= count){
+                temp_dir = argv[i];
+                DEFAULT_TEMP = false;
+            }
+            else {
+                Executive::err_out("-t requires an argument");
+            }
+        }
+        else if(std::string(argv[i]) == "-o"){
+            if( i < 4){
+                Executive::err_out("Missing positional arguments");
+            }
+            i+=1;
+            if (i <= count){
+                out_dir = argv[i];
+                DEFAULT_OUT = false;
+            }
+            else {
+                Executive::err_out("-o requires an argument");
+            }
+        }
+
     }
 
+    if (DEFAULT_TEMP){
+        std::cout << "INFO >> Using default directory 'TEMP_DIR' " << std::endl;
+    }
+    if (DEFAULT_OUT){
+        std::cout << "INFO >> Using default directory 'OUT_DIR' " << std::endl;
+    }
+    /*
     if(count == 2){
         in_dir = argv[1];
         temp_dir = DEFAULT_TEMP;
@@ -79,16 +117,20 @@ void Executive::parse_args(void){
         out_dir = argv[3];
         return;
     }
+    */ 
 
 }
 
 // print the help message 
 void Executive::print_help(void){
-    std::cout << "\tUSAGE >> " << argv[0] << " {in_dir} {temp_dir} {out_dir}\n" << std::endl;
+    std::cout << "\tUSAGE >> " << argv[0] << " {in_dir} {map_dll} {reduce_dll} -t {temp_dir} -o {out_dir}\n" << std::endl;
     std::cout << "\t-h, -help, --h, --help: print help message" << std::endl; 
     std::cout << "\tin_dir: \t\tREQUIRED: directory path containing files to be map reduced" << std::endl; 
+    std::cout << "\tmap DLL: \t\tREQUIRED: directory path to map DLL. " << std::endl;
+    std::cout << "\treduce DLL: \t\tREQUIRED: directory path to reduce DLL. " << std::endl;
     std::cout << "\ttemp_dir: \t\tDEFAULT - TEMP_DIR: directory path to location of mapped/intermediary files. " << std::endl; 
     std::cout << "\tout_dir: \t\tDEFAULT - OUT_DIR: directory path to location of reduced/final files. " << std::endl; 
+    
 }
 
 // DEPRECATED: USE parse_args
