@@ -1,6 +1,6 @@
-#include "BaseMapReduce.h"
+#include "BaseMap.h"
 
-class Map : public BaseMapReduce
+class Map : public BaseMap
 {
     public:
         Map();
