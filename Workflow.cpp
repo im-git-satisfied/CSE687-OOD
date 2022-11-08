@@ -38,15 +38,28 @@ void Workflow::verify_dirs(void){
     }
 
     // verify temp directory 
-     if (fm->verify_directory(temp_dir) == false){
-        std::cout << "ERROR >> temp directory " << temp_dir << " is invalid" <<std::endl;
-        exit(0);
+    if (fm->verify_directory(temp_dir) == false){
+        if (temp_dir == DEFAULT_TEMP){
+            fm->create_directory(temp_dir);
+            std::cout << "INFO  >> Creating default temporary directory " << temp_dir << std::endl;
+        }
+        else {
+            std::cout << "ERROR >> temp directory " << temp_dir << " is invalid" <<std::endl;
+            exit(0);
+        }
+        
     }
 
     //verify output directory 
      if (fm->verify_directory(out_dir) == false){
-        std::cout << "ERROR >> out directory " << out_dir << " is invalid" << std::endl;
-        exit(0);
+        if (out_dir == DEFAULT_OUT){
+            fm->create_directory(out_dir);
+            std::cout << "INFO  >> Creating default out directory " << out_dir << std::endl;
+        }
+        else {
+            std::cout << "ERROR >> out directory " << out_dir << " is invalid" << std::endl;
+            exit(0);
+        }
     }
 
     

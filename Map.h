@@ -15,5 +15,4 @@ class Map : public MapInterface
 
         std::vector<std::pair<std::string,std::vector<int>>> wordBuffer;
         bool isFull;
-
 };
