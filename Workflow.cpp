@@ -120,8 +120,8 @@ void Workflow::map_file(std::string file){
             mapper->tokenMap(file, line);
 
             // if Map buffer export is full, pass the buffer to FileManagement.writeFile and clear the buffer
-            if(mapper->isFull){
-                if(fm->writeFile(mapper->wordBuffer, target_dir, file)){
+            if(mapper->checkIsFull()){
+                if(fm->writeFile(mapper->getWordBuffer(), target_dir, file)){
                     mapper->clearBuffer();
                 }
                 else{
@@ -131,7 +131,7 @@ void Workflow::map_file(std::string file){
     }
 
     // grab the final items from the buffer after EOF is found
-    fm->writeFile(mapper->wordBuffer, temp_dir, file);
+    fm->writeFile(mapper->getWordBuffer(), temp_dir, file);
     mapper->clearBuffer();
 }
 

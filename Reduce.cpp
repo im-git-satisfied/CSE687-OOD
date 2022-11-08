@@ -13,7 +13,8 @@ std::vector<std::pair<std::string,std::vector<int>>> Reduce::reduce(std::string 
         reducedValue++;
     }
     // calls the exportReduce function
-    return exportReduce(word,reducedValue);
+    fileExport(word,reducedValue);
+    return reduceBuffer;
 }
 
 // exportReduce that creates the vector to pass to the file management
@@ -23,7 +24,11 @@ std::vector<std::pair<std::string,std::vector<int>>> Reduce::exportReduce(std::s
     // create a vector to export out the file management
     std::vector<int> cVec;
     cVec.push_back(reducedValue);
-    wordCount.push_back(make_pair(word,cVec));
-    return wordCount;
+    reduceBuffer.push_back(make_pair(word,cVec));
+}
+
+void Reduce::clearBuffer()
+{
+    reduceBuffer.clear();
 }
 
