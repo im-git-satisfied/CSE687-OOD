@@ -12,6 +12,23 @@ Executive::Executive(int argc, char *argv[], bool DEBUG) : count(argc), argv(arg
     }
 }
 
+// DEPRECATED: USE parse_args
+// Verify Count
+// ensure that the number of command line arguments are valid. 
+/*
+void Executive::verify_count(void){
+    std::string err_str = "ERROR >> Invalid number of arguments. See Help\n";
+    if(DEBUG){
+        std::cout << "DEBUG >> NUMBER ARGS: " << count << std::endl;
+    }
+    if (count != 4) {
+        err = true;
+        Executive::err_out(err_str);
+    }
+
+}
+*/
+
 void Executive::parse_args(void){
 
     std::string err_str = "ERROR >> Invalid number of arguments. See Help\n";
@@ -74,7 +91,7 @@ void Executive::parse_args(void){
     if (DEFAULT_TEMP){
         std::cout << "INFO >> Using default directory 'TEMP_DIR' " << std::endl;
     }
-    if (DEFAULT_OUT){
+    if (DEFAULT_OUT) {
         std::cout << "INFO >> Using default directory 'OUT_DIR' " << std::endl;
     }
 
@@ -101,11 +118,12 @@ void Executive::err_out(std::string err_msg) {
 
 int Executive::start() {
 
-    parse_args();             // replaces verify_count and grab_dirs. 
-
+    parse_args();
+    
     // create a Workflow class
     worker = new Workflow(in_dir, map_dll, reduce_dll, temp_dir, out_dir, DEBUG);
-    
+
+
     // Workflow.start() returns 1 on success 
     int err_code = worker->start();
 

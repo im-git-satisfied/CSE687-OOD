@@ -3,19 +3,17 @@
 
 #include "Sort.h"
 #include "FileManagement.h"
-//#include "Map.h"
 #include "MapInterface.h"
-//#include "Reduce.h"
 #include "ReduceInterface.h"
 #include "Workflow.h"
+#include "Windows.h"
 #include <iterator>
 #include <utility>
 #include <typeinfo>
 
 //Function* is the type to our interface class
-typedef MapInterface* (__cdecl *MapFactory)();
+typedef MapInterface* (__cdecl* MapFactory)();
 typedef ReduceInterface* (__cdecl* ReduceFactory)();
-
 
 class Workflow 
 {
@@ -24,24 +22,20 @@ class Workflow
         std::string in_dir;                     // user provided input dir
         std::string temp_dir;                   // user provided temp dir
         std::string out_dir;                    // user provided out dir
-
-        const wchar_t *map_dll;                 // map dll string 
-        const wchar_t *reduce_dll;              // reduce dll string 
-
         const std::string DEFAULT_TEMP = "TEMP_DIR";
         const std::string DEFAULT_OUT = "OUT_DIR";
+        std::string map_dll_dir;
+        std::string reduce_dll_dir;
 
         std::string curr_dir;                   // current read directory 
         std::string target_dir;                 // current write directory 
         
         std::vector<std::string> file_list;     // file list of curr_dir
 
-        SortMap *sorter;                        // sort class 
-		MapInterface *mapper;                      //Map Interface for Dll
-        //Map *mapper;                            // map class
-        FileManagement *fm ;                    // file management class
-        ReduceInterface *reducer;                   //reduce interface for dll
-        //Reduce *reducer;                        // reduce class 
+        SortMap* sorter;                        // sort class 
+        FileManagement* fm;                    // file management class
+        MapInterface* mapper;
+        ReduceInterface* reducer;
 
         bool DEBUG = false;                     // Debug flag
 
@@ -55,8 +49,8 @@ class Workflow
         
         void verify_dirs(void);                 // verify user input 
 
-        void load_dlls(void);
-        void free_dlls(void);                   // free the dlls
+        void load_dlls(void);                   //load DLLs
+        void free_dlls(void);       
 
         void list_files(void);                  // list the files for a respective directory
 

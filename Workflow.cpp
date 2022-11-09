@@ -6,19 +6,19 @@ Workflow::Workflow()
 }
 
 // Workflow constructor 
-Workflow::Workflow(std::string in_dir, std::string temp_dir, std::string out_dir, bool DEBUG) :
+Workflow::Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, bool DEBUG) :
     in_dir(in_dir),
+    map_dll_dir(map_dll),
+    reduce_dll_dir(reduce_dll),
     temp_dir(temp_dir),
     out_dir(out_dir),
     DEBUG(DEBUG)
 {
     // instantiate primary classes
-    //mapper = new Map();
     fm = new FileManagement();
-    //reducer = new Reduce();
     sorter = new SortMap(DEBUG); 
 
-    Workflow::load_dlls();          // Load Map and Reduce DLLs
+    Workflow::load_dlls();
 
     if(DEBUG){
         std::cout << "DEBUG >> WORKFLOW CLASS INITIALIZED" << std::endl;
@@ -63,35 +63,37 @@ void Workflow::verify_dirs(void){
             exit(0);
         }
     }
+
+    
 }
 
-void Workflow::load_dlls(void){
-
+void Workflow::load_dlls(void) {
     HINSTANCE map_dll;
-	HINSTANCE reduce_dll;
+    HINSTANCE reduce_dll;
 
-	map_dll = LoadLibrary(map_dll);
-	reduce_dll = LoadLibrary(reduce_dll);
+    map_dll = LoadLibraryA(map_dll_dir.c_str());
+    reduce_dll = LoadLibraryA(reduce_dll_dir.c_str());
+    
 
-	if (!map_dll) {
-		std::cout << "Failed to load map library" << std::endl;
-		exit(1);
-	}
+    if (!map_dll) {
+        std::cout << "Failed to load map library" << std::endl;
+        exit(1);
+    }
     else {
-	    MapFactory mapfactory = (MapFactory)GetProcAddress(map_dll, "CreateMap");
-        mapper = mapfactory(); 
+        MapFactory mapfactory = (MapFactory)GetProcAddress(map_dll, "CreateMap");
+        mapper = mapfactory();
     }
 
-	if (!reduce_dll) {
-		std::cout << "Failed to load reduce library" << std::endl;
-		exit(1);
-	}
+    if (!reduce_dll) {
+        std::cout << "Failed to load reduce library" << std::endl;
+        exit(1);
+    }
     else {
-	    ReduceFactory reducefactory = (ReduceFactory)GetProcAddress(reduce_dll, "CreateReduce");
+        ReduceFactory reducefactory = (ReduceFactory)GetProcAddress(reduce_dll, "CreateReduce");
         reducer = reducefactory();
     }
-
 }
+
 // List Files 
 // calls FileManagement.list_files
 void Workflow::list_files(void){
@@ -148,7 +150,7 @@ void Workflow::map_file(std::string file){
 
             // if Map buffer export is full, pass the buffer to FileManagement.writeFile and clear the buffer
             if(mapper->checkIsFull()){
-                if(fm->writeFile(mapper->getWordBuffer(), target_dir, file)){
+                if(fm->writeFile(mapper->getWordBuffer(), target_dir, file)) {
                     mapper->clearBuffer();
                 }
                 else{
@@ -227,9 +229,7 @@ void Workflow::finish(void){
 // Workflow order of operations 
 int Workflow::start(void){
 
-    
     Workflow::verify_dirs();        // Verify Directories
-
 
     Workflow::map_files();          // Map_Files
 

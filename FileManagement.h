@@ -31,6 +31,7 @@ public:
 	void setOutputDirectory(std::string name);
 
 	bool verify_directory(std::string directory_name);
+	bool verify_file(std::string file_name);
 	std::vector<std::string> list_files(std::string directory_name);
 	bool create_directory(std::string directory_name);
 
