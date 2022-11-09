@@ -13,10 +13,12 @@ Workflow::Workflow(std::string in_dir, std::string temp_dir, std::string out_dir
     DEBUG(DEBUG)
 {
     // instantiate primary classes
-    mapper = new Map();
+    //mapper = new Map();
     fm = new FileManagement();
-    reducer = new Reduce();
+    //reducer = new Reduce();
     sorter = new SortMap(DEBUG); 
+
+    Workflow::load_dlls();          // Load Map and Reduce DLLs
 
     if(DEBUG){
         std::cout << "DEBUG >> WORKFLOW CLASS INITIALIZED" << std::endl;
@@ -61,10 +63,35 @@ void Workflow::verify_dirs(void){
             exit(0);
         }
     }
-
-    
 }
 
+void Workflow::load_dlls(void){
+
+    HINSTANCE map_dll;
+	HINSTANCE reduce_dll;
+
+	map_dll = LoadLibrary(map_dll);
+	reduce_dll = LoadLibrary(reduce_dll);
+
+	if (!map_dll) {
+		std::cout << "Failed to load map library" << std::endl;
+		exit(1);
+	}
+    else {
+	    MapFactory mapfactory = (MapFactory)GetProcAddress(map_dll, "CreateMap");
+        mapper = mapfactory(); 
+    }
+
+	if (!reduce_dll) {
+		std::cout << "Failed to load reduce library" << std::endl;
+		exit(1);
+	}
+    else {
+	    ReduceFactory reducefactory = (ReduceFactory)GetProcAddress(reduce_dll, "CreateReduce");
+        reducer = reducefactory();
+    }
+
+}
 // List Files 
 // calls FileManagement.list_files
 void Workflow::list_files(void){
@@ -202,6 +229,7 @@ int Workflow::start(void){
 
     
     Workflow::verify_dirs();        // Verify Directories
+
 
     Workflow::map_files();          // Map_Files
 

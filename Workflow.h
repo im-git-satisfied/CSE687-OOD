@@ -3,13 +3,18 @@
 
 #include "Sort.h"
 #include "FileManagement.h"
-#include "Map.h"
-#include "Reduce.h"
+//#include "Map.h"
+#include "MapInterface.h"
+//#include "Reduce.h"
+#include "ReduceInterface.h"
 #include "Workflow.h"
 #include <iterator>
 #include <utility>
 #include <typeinfo>
 
+//Function* is the type to our interface class
+typedef MapInterface* (__cdecl *MapFactory)();
+typedef ReduceInterface* (__cdecl* ReduceFactory)();
 
 
 class Workflow 
@@ -19,6 +24,10 @@ class Workflow
         std::string in_dir;                     // user provided input dir
         std::string temp_dir;                   // user provided temp dir
         std::string out_dir;                    // user provided out dir
+
+        const wchar_t *map_dll;                 // map dll string 
+        const wchar_t *reduce_dll;              // reduce dll string 
+
         const std::string DEFAULT_TEMP = "TEMP_DIR";
         const std::string DEFAULT_OUT = "OUT_DIR";
 
@@ -28,9 +37,11 @@ class Workflow
         std::vector<std::string> file_list;     // file list of curr_dir
 
         SortMap *sorter;                        // sort class 
-        Map *mapper;                            // map class
+		MapInterface *mapper;                      //Map Interface for Dll
+        //Map *mapper;                            // map class
         FileManagement *fm ;                    // file management class
-        Reduce *reducer;                        // reduce class 
+        ReduceInterface *reducer;                   //reduce interface for dll
+        //Reduce *reducer;                        // reduce class 
 
         bool DEBUG = false;                     // Debug flag
 
@@ -44,6 +55,9 @@ class Workflow
         
         void verify_dirs(void);                 // verify user input 
 
+        void load_dlls(void);
+        void free_dlls(void);                   // free the dlls
+
         void list_files(void);                  // list the files for a respective directory
 
         //void err_out(std::string);
@@ -54,7 +68,7 @@ class Workflow
         
         // constructors 
         explicit Workflow();
-        explicit Workflow(std::string in_dir, std::string temp_dir, std::string out_dir, bool DEBUG);
+        explicit Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, bool DEBUG);
 
         int start();                            // kick off Workflow class
 
