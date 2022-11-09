@@ -49,7 +49,8 @@ void FileManagement::setOutputDirectory(std::string name)
 }
 
 // create directory as specified
-bool FileManagement::create_directory(std::string directory_name) {
+bool FileManagement::create_directory(std::string directory_name) 
+{
 	return std::filesystem::create_directory(directory_name);
 }
 
@@ -57,6 +58,11 @@ bool FileManagement::create_directory(std::string directory_name) {
 bool FileManagement::verify_directory(std::string directory_name) 
 {
 	return std::filesystem::is_directory(directory_name);
+}
+
+bool FileManagement::verify_file(std::string file_name) 
+{
+	return std::filesystem::is_regular_file(file_name);
 }
 
 // Return vector of files/directories from the given directory path
