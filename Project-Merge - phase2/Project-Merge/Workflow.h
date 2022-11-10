@@ -24,16 +24,19 @@ class Workflow
         std::string out_dir;                    // user provided out dir
         const std::string DEFAULT_TEMP = "TEMP_DIR";
         const std::string DEFAULT_OUT = "OUT_DIR";
-        std::string map_dll_dir;
-        std::string reduce_dll_dir;
+        std::string map_dll_dir;                // file path to dll
+        std::string reduce_dll_dir;             // file path to dll
 
         std::string curr_dir;                   // current read directory 
         std::string target_dir;                 // current write directory 
+
+        HINSTANCE map_dll;                      // dll handle
+        HINSTANCE reduce_dll;                   // dll handle
         
         std::vector<std::string> file_list;     // file list of curr_dir
 
         SortMap* sorter;                        // sort class 
-        FileManagement* fm;                    // file management class
+        FileManagement* fm;                     // file management class
         MapInterface* mapper;
         ReduceInterface* reducer;
 

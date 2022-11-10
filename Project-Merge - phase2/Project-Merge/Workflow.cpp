@@ -68,8 +68,6 @@ void Workflow::verify_dirs(void){
 }
 
 void Workflow::load_dlls(void) {
-    HINSTANCE map_dll;
-    HINSTANCE reduce_dll;
 
     map_dll = LoadLibraryA(map_dll_dir.c_str());
     reduce_dll = LoadLibraryA(reduce_dll_dir.c_str());
@@ -93,6 +91,15 @@ void Workflow::load_dlls(void) {
         reducer = reducefactory();
     }
 }
+
+void Workflow::free_dlls(void) {
+    mapper->Destroy();
+    reducer->Destroy();
+
+    FreeLibrary(map_dll);
+    FreeLibrary(reduce_dll);
+}
+
 
 // List Files 
 // calls FileManagement.list_files
@@ -236,6 +243,8 @@ int Workflow::start(void){
     Workflow::reduce_files();       // Reduce Files
 
     Workflow::finish();             // Finish
+
+    Workflow::free_dlls();          // Unload dlls
 
     return 1;
 }
