@@ -11,6 +11,8 @@
 #include <utility>
 #include <typeinfo>
 
+#include <thread>
+
 //Function* is the type to our interface class
 typedef MapInterface* (__cdecl* MapFactory)();
 typedef ReduceInterface* (__cdecl* ReduceFactory)();
@@ -35,20 +37,20 @@ class Workflow
         
         std::vector<std::string> file_list;     // file list of curr_dir
 
-        SortMap* sorter;                        // sort class 
+        std::vector<SortMap*> sorter;                        // sort class 
         FileManagement* fm;                     // file management class
-        MapInterface* mapper;
-        ReduceInterface* reducer;
+        std::vector<MapInterface*> mapper;
+        std::vector<ReduceInterface*> reducer;
 
         bool DEBUG = false;                     // Debug flag
 
         void finish(void);                      // final workflow tasks (write SUCCESS file)
 
         void map_files(void);                   // iterate over files for mapping 
-        void map_file(std::string file);        // map individual files
+        void map_file(MapInterface* map, std::string file);        // map individual files
 
         void reduce_files(void);                // iterate over files for reducing
-        void reduce_file(std::string file);     // reduce individual files 
+        void reduce_file(ReduceInterface* reduce, SortMap* sort, std::string file);     // reduce individual files 
         
         void verify_dirs(void);                 // verify user input 
 

@@ -16,9 +16,10 @@ Workflow::Workflow(std::string in_dir, std::string map_dll, std::string reduce_d
 {
     // instantiate primary classes
     fm = new FileManagement();
-    sorter = new SortMap(DEBUG); 
 
-    Workflow::load_dlls();
+    for (int i = 0; i < 17; i++) {
+        sorter.push_back(new SortMap(DEBUG));
+    }
 
     if(DEBUG){
         std::cout << "DEBUG >> WORKFLOW CLASS INITIALIZED" << std::endl;
@@ -79,7 +80,10 @@ void Workflow::load_dlls(void) {
     }
     else {
         MapFactory mapfactory = (MapFactory)GetProcAddress(map_dll, "CreateMap");
-        mapper = mapfactory();
+        int count = fm->list_files(in_dir).size();
+        for (int i = 0; i < count; i++) {
+            mapper.push_back(mapfactory());
+        }
     }
 
     if (!reduce_dll) {
@@ -88,13 +92,23 @@ void Workflow::load_dlls(void) {
     }
     else {
         ReduceFactory reducefactory = (ReduceFactory)GetProcAddress(reduce_dll, "CreateReduce");
-        reducer = reducefactory();
+        int count = fm->list_files(in_dir).size();
+        for (int i = 0; i < count; i++) {
+            reducer.push_back(reducefactory());
+        }
     }
 }
 
 void Workflow::free_dlls(void) {
-    mapper->Destroy();
-    reducer->Destroy();
+    for (int i = 0; i < 17; i++) {
+        mapper[i]->Destroy();
+    }
+
+    for (int i = 0; i < 17; i++) {
+        reducer[i]->Destroy();
+    }
+    //mapper->Destroy();
+    //reducer->Destroy();
 
     FreeLibrary(map_dll);
     FreeLibrary(reduce_dll);
@@ -124,15 +138,25 @@ void Workflow::map_files(void){
     target_dir = temp_dir;          // set target_dir to temp directory 
     Workflow::list_files();         // grab the list of files from curr_dir 
 
-    // iterate over file list and call map_file 
+    std::vector<std::thread> threads;
+
+    // iterate over file list and call map_file
+    int j = 0;
     for(auto& file: file_list){
         if(DEBUG){
             std::cout << "DEUBG >> MAPPING FILE: " << curr_dir << file << std::endl;
         }
         std::cout << "MAPPING " << file << std::endl;
 
-        Workflow::map_file(file);
+        threads.push_back(std::thread(&Workflow::map_file, this, mapper[j], file));
+        j++;
+        //Workflow::map_file(file);
     }
+
+    for (int i = 0; i < file_list.size(); i++) {
+        threads[i].join();
+    }
+
     if(DEBUG){
         std::cout << "DEBUG >> FINISHED MAPPING FILES" << std::endl;
     }
@@ -141,11 +165,11 @@ void Workflow::map_files(void){
 
 // Map File
 // calls FileManagement.readFile and Maps files. 
-void Workflow::map_file(std::string file){
+void Workflow::map_file(MapInterface* map, std::string file){
     bool read = true;
     std::string line = "" ;
 
-    // read loop that continues to call FileManagent.readFile until EOF is found
+    // read loop that continues to call FileManagment.readFile until EOF is found
     while(read) {
             line = fm->readFile(curr_dir, file);
             if(fm->EndOfFile(file) == true) {
@@ -153,12 +177,12 @@ void Workflow::map_file(std::string file){
             }
 
             // pass read lines to Mapper
-            mapper->tokenMap(file, line);
+            map->tokenMap(file, line);
 
             // if Map buffer export is full, pass the buffer to FileManagement.writeFile and clear the buffer
-            if(mapper->checkIsFull()){
-                if(fm->writeFile(mapper->getWordBuffer(), target_dir, file)) {
-                    mapper->clearBuffer();
+            if(map->checkIsFull()){
+                if(fm->writeFile(map->getWordBuffer(), target_dir, file)) {
+                    map->clearBuffer();
                 }
                 else{
                     std::cout << "Error writing to temporary file for " << file <<std::endl; 
@@ -167,8 +191,8 @@ void Workflow::map_file(std::string file){
     }
 
     // grab the final items from the buffer after EOF is found
-    fm->writeFile(mapper->getWordBuffer(), temp_dir, file);
-    mapper->clearBuffer();
+    fm->writeFile(map->getWordBuffer(), temp_dir, file);
+    map->clearBuffer();
 }
 
 // ITerate over files for reducing
@@ -177,14 +201,26 @@ void Workflow::reduce_files(void){
     target_dir = out_dir;               // set target_dir to out_dir 
     Workflow::list_files();             // list files of curr dir 
 
+    std::vector<std::thread> threads;
+
+
     // iterate over files and call Workflow.reduce_file
+    int j = 0;
     for(auto& file: file_list){
         if(DEBUG){
             std::cout << "DEUBG >> REDUCING FILE: " << curr_dir << file << std::endl;
         }
         std::cout << "REDUCING " << file << std::endl;
-        Workflow::reduce_file(file);
+
+        threads.push_back(std::thread(&Workflow::reduce_file, this, reducer[j], sorter[j], file));
+        j++;
+        //Workflow::reduce_file(file);
     }
+
+    for (int i = 0; i < file_list.size(); i++) {
+        threads[i].join();
+    }
+
     if(DEBUG){
         std::cout << "DEBUG >> FINISHED REDUCING FILES" << std::endl;
     }
@@ -192,7 +228,7 @@ void Workflow::reduce_files(void){
 
 // Reduce File
 // Calls FileManagement.readFile, SortMap.sort, and Reduce.reduce
-void Workflow::reduce_file(std::string file){
+void Workflow::reduce_file(ReduceInterface* reduce, SortMap* sort,std::string file){
     bool read = true;
     std::string line = "";
     
@@ -205,19 +241,19 @@ void Workflow::reduce_file(std::string file){
         if(DEBUG) {
             std::cout << "DEBUG >> SORTING LINE: " << line << std::endl;
         }
-        sorter->sort(line);
+        sort->sort(line);
     }
 
     // send sortMap elements to reducer, word by word 
-    for (auto x = sorter->begin(); x != sorter->end(); x++){
+    for (auto x = sort->begin(); x != sort->end(); x++){
         if(DEBUG) {
             std::cout << "DEBUG >> SEND SORTED KEY,VAL TO REDUCE.REDUCE" << std::endl;
         }
-        fm->writeFile(reducer->reduce(x->first, x->second), target_dir, file);
+        fm->writeFile(reduce->reduce(x->first, x->second), target_dir, file);
     }
 
     // clear the SortMap after it's been written out 
-    sorter->clear();
+    sort->clear();
 
     
 }
@@ -237,6 +273,8 @@ void Workflow::finish(void){
 int Workflow::start(void){
 
     Workflow::verify_dirs();        // Verify Directories
+
+    Workflow::load_dlls();
 
     Workflow::map_files();          // Map_Files
 
