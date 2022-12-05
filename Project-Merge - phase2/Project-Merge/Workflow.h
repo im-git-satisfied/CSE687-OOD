@@ -8,8 +8,16 @@
 #include "Workflow.h"
 #include "Windows.h"
 #include <iterator>
+#include <iostream>
+#include <string>
 #include <utility>
 #include <typeinfo>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #include <thread>
 
@@ -59,15 +67,29 @@ class Workflow
 
         void list_files(void);                  // list the files for a respective directory
 
-        //void err_out(std::string);
+        //networking methods and attributes: 
+        int LPORT;
+        int server_fd, new_socket, valread;
+	    struct sockaddr_in address;
+	    int opt = 1;
+	    int addrlen = sizeof(address);
+	    char buffer[1024] = { 0 };
+        bool listen = true;
+	    //std::string hello = "Hello from server";
+        
 
+        //void err_out(std::string);
+        void serve(void);
+        void get_fd(void);
+        void set_sock(void);
+        void listen(void);
         
 
     public:
         
         // constructors 
         explicit Workflow();
-        explicit Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, bool DEBUG);
+        explicit Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, int port, bool DEBUG);
 
         int start();                            // kick off Workflow class
 

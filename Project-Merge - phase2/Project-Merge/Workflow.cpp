@@ -6,13 +6,15 @@ Workflow::Workflow()
 }
 
 // Workflow constructor 
-Workflow::Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, bool DEBUG) :
+Workflow::Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, 
+                    std::string temp_dir, std::string out_dir, int port, bool DEBUG) :
     in_dir(in_dir),
     map_dll_dir(map_dll),
     reduce_dll_dir(reduce_dll),
     temp_dir(temp_dir),
     out_dir(out_dir),
-    DEBUG(DEBUG)
+    DEBUG(DEBUG),
+    LPORT(port)
 {
     // instantiate primary classes
     fm = new FileManagement();
@@ -268,18 +270,108 @@ void Workflow::finish(void){
     fm->writeFileSuccess(out_dir, "SUCCESS");
 }
 
+void Workflow::get_fd(void){
+	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		perror("socket failed");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void Workflow::set_sock(void){
+    if (setsockopt(server_fd, SOL_SOCKET,
+				SO_REUSEADDR | SO_REUSEPORT, &opt,
+				sizeof(opt))) {
+		perror("setsockopt");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void Workflow::bind_sock(void){
+    address.sin_family = AF_INET;
+	address.sin_addr.s_addr = INADDR_ANY;
+	address.sin_port = htons(PORT);
+
+	// Forcefully attaching socket to the port 8080
+	if (bind(server_fd, (struct sockaddr*)&address,
+			sizeof(address))
+		< 0) {
+		perror("bind failed");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void Workflow::listen(void){
+    // listen
+    if (listen(server_fd, 3) < 0) {
+		perror("listen");
+		exit(EXIT_FAILURE);
+	}
+
+    // accept
+    if ((new_socket
+		= accept(server_fd, (struct sockaddr*)&address,
+				(socklen_t*)&addrlen))
+		< 0) {
+		perror("accept");
+		exit(EXIT_FAILURE);
+	}
+    while(true) {
+	    valread = read(new_socket, buffer, 1024);
+	    if (buffer == "map\n"){
+            std::cout << "mapping";
+            // call map method
+        }
+        else {
+            // call reduce method 
+            std::cout << "reducing"
+        }
+	    //send(new_socket, hello.c_str(), hello.length(), 0);
+	    //printf("Hello message sent\n");
+    }
+}
+
+//network methods 
+int Workflow::serve(void){
+  
+    Workflow::get_fd();
+
+	// Forcefully attaching socket to the port 8080
+	Workflow::set_sock();
+
+    Workflow::bind_sock();
+	
+    
+    while(listen){
+        Workflow::listen();
+    }
+	
+	// closing the connected socket
+	close(new_socket);
+	// closing the listening socket
+	shutdown(server_fd, SHUT_RDWR);
+	return 0;
+}
 
 // Workflow order of operations 
 int Workflow::start(void){
 
+
+    // verify dirs should happen at the controller 
+    // though, the workflow will have access to the files as well
     Workflow::verify_dirs();        // Verify Directories
 
-    Workflow::load_dlls();
+    // The workflow will load the DLL's 
+    //Commented out for testing on linux 
+    //Workflow::load_dlls();
 
-    Workflow::map_files();          // Map_Files
+    Workflow::serve(); 
+    //This will get moved into a listen method() 
+    //Workflow::map_files();          // Map_Files
 
-    Workflow::reduce_files();       // Reduce Files
+    // This will get moved into a listen method() 
+    //Workflow::reduce_files();       // Reduce Files
 
+    // This will also get moved into a listen method()
     Workflow::finish();             // Finish
 
     Workflow::free_dlls();          // Unload dlls
