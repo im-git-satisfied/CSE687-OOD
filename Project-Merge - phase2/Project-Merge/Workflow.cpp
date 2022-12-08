@@ -14,7 +14,7 @@ Workflow::Workflow(std::string in_dir, std::string map_dll, std::string reduce_d
     temp_dir(temp_dir),
     out_dir(out_dir),
     DEBUG(DEBUG),
-    LPORT(port)
+    LPORT(port) // listening port
 {
     // instantiate primary classes
     fm = new FileManagement();
@@ -310,16 +310,20 @@ void Workflow::listen_func(void){
 	}
 
     // accept
-    if ((new_socket
-		= accept(server_fd, (struct sockaddr*)&address,
-				(socklen_t*)&addrlen))
-		< 0) {
+    if ((new_socket = accept(server_fd, (struct sockaddr*)&address,(socklen_t*)&addrlen)) < 0) {
 		perror("accept");
 		exit(EXIT_FAILURE);
 	}
+    else {
+        std::cout << "connection made!! " << std::endl; 
+    }
 
+    // Read loop
+    // from here, the snub program will receive commands and spin off 
+    // workers as the commands require. 
     while(true) {
-	    valread = _read(new_socket, buffer, 1024);
+	    valread = recv(new_socket, buffer, 1024,0);
+        std::cout << "recieved: " << std::endl;
 	    if (buffer == "map\n"){
             std::cout << "mapping";
             // call map method
