@@ -1,5 +1,17 @@
 #ifndef WORKFLOW_H
 #define WORKFLOW_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
+#include <stdio.h>
+#include <io.h>
+
+#pragma comment(lib, "Ws2_32.lib")
 
 #include "Sort.h"
 #include "FileManagement.h"
@@ -12,15 +24,19 @@
 #include <string>
 #include <utility>
 #include <typeinfo>
-#include <netinet/in.h>
-#include <stdio.h>
+//#include <netinet/in.h>
+//#include "winsock2.h"
+//#include "winsock.h"
+//#include <ws2tcpip.h>
+//#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
+//#include <sys/socket.h>
+//#include <unistd.h>
 
 #include <thread>
 
+//#pragma comment (lib, "Ws2_32.lib")
 //Function* is the type to our interface class
 typedef MapInterface* (__cdecl* MapFactory)();
 typedef ReduceInterface* (__cdecl* ReduceFactory)();
@@ -74,7 +90,7 @@ class Workflow
 	    int opt = 1;
 	    int addrlen = sizeof(address);
 	    char buffer[1024] = { 0 };
-        bool listen = true;
+        bool listen_var = true;
 	    //std::string hello = "Hello from server";
         
 
@@ -82,14 +98,15 @@ class Workflow
         void serve(void);
         void get_fd(void);
         void set_sock(void);
-        void listen(void);
+        void bind_sock(void);
+        void listen_func(void);
         
 
     public:
         
         // constructors 
         explicit Workflow();
-        explicit Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, int port, bool DEBUG);
+        explicit Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, std::string temp_dir, std::string out_dir, bool DEBUG, int port);
 
         int start();                            // kick off Workflow class
 

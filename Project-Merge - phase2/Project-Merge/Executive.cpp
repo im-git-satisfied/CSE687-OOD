@@ -37,7 +37,7 @@ void Executive::parse_args(void){
         std::cout << "DEBUG >> NUMBER ARGS: " << count << std::endl;
     }
 
-    if (count < 4) {
+    if (count < 5) {
         err = true;
         Executive::err_out(err_str);
     }
@@ -45,6 +45,7 @@ void Executive::parse_args(void){
     in_dir = argv[1];
     map_dll = argv[2];
     reduce_dll = argv[3];
+    LPORT = atoi(argv[4]);
 
     for(i; i < count ; i++){
         if(std::string(argv[i]) == "-h"){
@@ -73,7 +74,7 @@ void Executive::parse_args(void){
             }
         }
         else if(std::string(argv[i]) == "-o"){
-            if( i < 4){
+            if( i < 5){
                 Executive::err_out("Missing positional arguments");
             }
             i+=1;
@@ -104,6 +105,7 @@ void Executive::print_help(void){
     std::cout << "\tin_dir: \t\tREQUIRED: directory path containing files to be map reduced" << std::endl; 
     std::cout << "\tmap DLL: \t\tREQUIRED: directory path to map DLL. " << std::endl;
     std::cout << "\treduce DLL: \t\tREQUIRED: directory path to reduce DLL. " << std::endl;
+    std::cout << "\tlisten port: \t\tREQUIRED: listen port for server. " << std::endl;
     std::cout << "\ttemp_dir: \t\tDEFAULT - TEMP_DIR: directory path to location of mapped/intermediary files. " << std::endl; 
     std::cout << "\tout_dir: \t\tDEFAULT - OUT_DIR: directory path to location of reduced/final files. " << std::endl; 
     
@@ -121,7 +123,7 @@ int Executive::start() {
     parse_args();
     
     // create a Workflow class
-    worker = new Workflow(in_dir, map_dll, reduce_dll, temp_dir, out_dir, DEBUG);
+    worker = new Workflow(in_dir, map_dll, reduce_dll, temp_dir, out_dir, DEBUG, LPORT);
 
 
     // Workflow.start() returns 1 on success 

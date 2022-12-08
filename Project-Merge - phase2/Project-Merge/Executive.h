@@ -23,6 +23,7 @@ class Executive
         std::string out_dir = "OUT_DIR";
         std::string map_dll;
         std::string reduce_dll; 
+        int LPORT;
         Workflow *worker;
         bool DEBUG;
 

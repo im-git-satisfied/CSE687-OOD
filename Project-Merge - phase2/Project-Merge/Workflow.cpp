@@ -7,7 +7,7 @@ Workflow::Workflow()
 
 // Workflow constructor 
 Workflow::Workflow(std::string in_dir, std::string map_dll, std::string reduce_dll, 
-                    std::string temp_dir, std::string out_dir, int port, bool DEBUG) :
+                    std::string temp_dir, std::string out_dir, bool DEBUG, int port) :
     in_dir(in_dir),
     map_dll_dir(map_dll),
     reduce_dll_dir(reduce_dll),
@@ -257,7 +257,6 @@ void Workflow::reduce_file(ReduceInterface* reduce, SortMap* sort,std::string fi
     // clear the SortMap after it's been written out 
     sort->clear();
 
-    
 }
 
 
@@ -278,18 +277,20 @@ void Workflow::get_fd(void){
 }
 
 void Workflow::set_sock(void){
+    
     if (setsockopt(server_fd, SOL_SOCKET,
-				SO_REUSEADDR | SO_REUSEPORT, &opt,
+				 SO_REUSEADDR, (char *) & opt,
 				sizeof(opt))) {
 		perror("setsockopt");
 		exit(EXIT_FAILURE);
 	}
+
 }
 
 void Workflow::bind_sock(void){
     address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(PORT);
+	address.sin_port = htons(LPORT);
 
 	// Forcefully attaching socket to the port 8080
 	if (bind(server_fd, (struct sockaddr*)&address,
@@ -300,8 +301,9 @@ void Workflow::bind_sock(void){
 	}
 }
 
-void Workflow::listen(void){
+void Workflow::listen_func(void){
     // listen
+    
     if (listen(server_fd, 3) < 0) {
 		perror("listen");
 		exit(EXIT_FAILURE);
@@ -315,15 +317,16 @@ void Workflow::listen(void){
 		perror("accept");
 		exit(EXIT_FAILURE);
 	}
+
     while(true) {
-	    valread = read(new_socket, buffer, 1024);
+	    valread = _read(new_socket, buffer, 1024);
 	    if (buffer == "map\n"){
             std::cout << "mapping";
             // call map method
         }
         else {
             // call reduce method 
-            std::cout << "reducing"
+            std::cout << "reducing";
         }
 	    //send(new_socket, hello.c_str(), hello.length(), 0);
 	    //printf("Hello message sent\n");
@@ -331,7 +334,7 @@ void Workflow::listen(void){
 }
 
 //network methods 
-int Workflow::serve(void){
+void Workflow::serve(void){
   
     Workflow::get_fd();
 
@@ -340,21 +343,34 @@ int Workflow::serve(void){
 
     Workflow::bind_sock();
 	
-    
-    while(listen){
-        Workflow::listen();
+    while(listen_var){
+        std::cout << "listening on port: " << LPORT <<  std::endl;
+        Workflow::listen_func();
     }
-	
+
+    std::cout << "No longer listening" << std::endl;
+
 	// closing the connected socket
-	close(new_socket);
+	_close(new_socket);
 	// closing the listening socket
-	shutdown(server_fd, SHUT_RDWR);
-	return 0;
+	shutdown(server_fd, SD_BOTH);
+	//return 0;
 }
 
 // Workflow order of operations 
 int Workflow::start(void){
+  
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
 
+    wVersionRequested = MAKEWORD(2, 2);
+
+    err = WSAStartup(wVersionRequested, &wsaData);
+    if (err != 0) {
+        printf("WSAStartup failed with error: %d\n", err);
+        return 1;
+    }
 
     // verify dirs should happen at the controller 
     // though, the workflow will have access to the files as well
@@ -362,7 +378,7 @@ int Workflow::start(void){
 
     // The workflow will load the DLL's 
     //Commented out for testing on linux 
-    //Workflow::load_dlls();
+    Workflow::load_dlls();
 
     Workflow::serve(); 
     //This will get moved into a listen method() 
@@ -371,10 +387,11 @@ int Workflow::start(void){
     // This will get moved into a listen method() 
     //Workflow::reduce_files();       // Reduce Files
 
+    
     // This will also get moved into a listen method()
     Workflow::finish();             // Finish
 
-    Workflow::free_dlls();          // Unload dlls
+    //Workflow::free_dlls();          // Unload dlls
 
     return 1;
 }

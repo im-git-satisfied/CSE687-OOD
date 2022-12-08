@@ -2,7 +2,7 @@
 
 FileManagement::FileManagement() 
 {
-	std::cout << "Creating FileManagement Class" << std::endl;
+	//std::cout << "Creating FileManagement Class" << std::endl;
 }
 
 // Constructor that takes 3 arguments (input, intermediate, and output) directory paths

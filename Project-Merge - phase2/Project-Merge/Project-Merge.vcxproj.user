@@ -2,6 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>"..\TestDir\shakespeare" "DLL\MapDLL.dll" "DLL\ReduceDLL.dll" "-t" "..\TestDir\temp" "-o" "..\TestDir\out"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"..\TestDir\shakespeare" "DLL\MapDLL.dll" "DLL\ReduceDLL.dll" "8000" "-t" "..\TestDir\temp" "-o" "..\TestDir\out"</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>
