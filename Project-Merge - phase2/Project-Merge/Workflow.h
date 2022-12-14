@@ -70,12 +70,12 @@ class Workflow
 
         void finish(void);                      // final workflow tasks (write SUCCESS file)
 
-        //void map_files(void);                   // iterate over files for mapping 
-        void map_files(std::vector<std::string> passed_files);
+        void map_files(void);                   // iterate over files for mapping 
+        //void map_files(std::vector<std::string> passed_files);
         void map_file(MapInterface* map, std::string file);        // map individual files
 
-        //void reduce_files(void);                // iterate over files for reducing
-        void reduce_files(std::vector<std::string> passed_files);
+        void reduce_files(void);                // iterate over files for reducing
+        //void reduce_files(std::vector<std::string> passed_files);
         void reduce_file(ReduceInterface* reduce, SortMap* sort, std::string file);     // reduce individual files 
         
         void verify_dirs(void);                 // verify user input 
@@ -86,6 +86,7 @@ class Workflow
         void list_files(void);                  // list the files for a respective directory
 
         //networking methods and attributes: 
+        struct sock_info { int fd; sockaddr_in address; socklen_t addrlen; };
         int LPORT;
         int server_fd;
 	    struct sockaddr_in address;
@@ -96,7 +97,7 @@ class Workflow
         bool listen_var = true;
 	    //std::string hello = "Hello from server";
         
-        void parse_cmd(int recv_len, char* buffer, std::string* cmd, std::vector<std::string> *file_list);
+        std::string parse_cmd(int recv_len, char* buffer);
 
 
         //void err_out(std::string);
@@ -105,7 +106,10 @@ class Workflow
         void set_sock(void);
         void bind_sock(void);
         void listen_func(void);
-        void sock_thread(int *sock, std::string *func_call);
+        void sock_map(sock_info* sock);
+        void sock_reduce(sock_info* sock);
+
+        
         
 
     public:
